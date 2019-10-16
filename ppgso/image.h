@@ -45,6 +45,14 @@ namespace ppgso {
     void setPixel(int x, int y, const Pixel& color);
 
     /*!
+     * Update color of specific Pixel
+     * @param pixel
+     * @param r
+     * @param g
+     * @param b
+     */
+    static void updatePixelColor(Pixel& pixel, uint8_t r, uint8_t g, uint8_t b);
+    /*!
      * Set pixel on coordinates x and y
      * @param x Horizontal coordinate
      * @param y Vertical coordinate

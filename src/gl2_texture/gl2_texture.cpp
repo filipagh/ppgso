@@ -31,7 +31,7 @@ private:
    * @param width Width of the image to load
    * @param height Height of the image to load
    */
-  void loadImage(const string &image_file, int width, int height) {
+  void loadImage(const std::string &image_file, int width, int height) {
     // Create new OpenGL texture object identifier
     glGenTextures(1, &texture_id);
     glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -44,7 +44,7 @@ private:
     std::ifstream image_stream(image_file, std::ios::binary);
 
     // Setup buffer for pixels (r,g,b bytes), since we will not manipulate the image just keep it as char
-    vector<char> buffer(static_cast<std::size_t>(width * height * 3));
+    std::vector<char> buffer(static_cast<std::size_t>(width * height * 3));
     image_stream.read(buffer.data(), static_cast<std::streamsize>(buffer.size()));
     image_stream.close();
 
@@ -61,7 +61,7 @@ public:
    */
   TextureWindow() : Window{"gl2_texture", SIZE, SIZE} {
     // Load the image from file
-    loadImage("lena.raw", SIZE, SIZE);
+    loadImage("result.raw", SIZE, SIZE);
 
     // Set the program uniform input "Texture" to the loaded data
     auto texture_attrib = program.getUniformLocation("Texture");
@@ -88,7 +88,7 @@ public:
   /*!
    * Window refresh implementation that will be called automatically from pollEvents when needed
    */
-  void onRefresh() override {
+  void onIdle() override {
     // Set gray background
     glClearColor(.5f, .5f, .5f, 0);
 
