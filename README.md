@@ -1,4 +1,4 @@
-# PPGSO Computer Graphics Examples
+ # PPGSO Computer Graphics Examples
 
 This repository contains examples for teaching computer graphics courses. The examples are separated into multiple categories and numbered for easier study. Examples that use the _gl_ prefix rely on the OpenGL API while the _raw_ prefix indicates examples that do not rely on any additional libraries.
 
