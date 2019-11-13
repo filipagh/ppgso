@@ -19,26 +19,28 @@
 
 #include <shaders/color_vert_glsl.h>
 #include <shaders/color_frag_glsl.h>
-
 const unsigned int SIZE = 512;
 
 class Camera {
 public:
   // TODO: Add parameters
-  glm::mat4 viewMatrix;
-  glm::mat4 projectionMatrix;
+  glm::mat4 viewMatrix = glm::mat4{1};
+  glm::mat4 projectionMatrix = glm::mat4{1};
 
   /// Representaiton of
   /// \param fov - Field of view (in degrees)
   /// \param ratio - Viewport ratio (width/height)
   /// \param near - Distance of the near clipping plane
   /// \param far - Distance of the far clipping plane
-  Camera(float fov = 45.0f, float ratio = 1.0f, float near = 0.1f, float far = 10.0f) {
+  Camera(float fov, float ratio, float near, float far) {
+      projectionMatrix = glm::perspective(fov , ratio, near, far);
     // TODO: Initialize perspective projection (hint: glm::perspective)
   }
 
   /// Recalculate viewMatrix from position, rotation and scale
   void update() {
+      viewMatrix = glm::lookAt(glm::vec3{0.0f, 0.0f, 10.0f}, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 1.0f, 0.0f});
+//      viewMatrix = glm::mat4{1};
     // TODO: Update viewMatrix (hint: glm::lookAt)
   }
 };
@@ -71,12 +73,17 @@ class Particle final : public Renderable {
   static std::unique_ptr<ppgso::Shader> shader;
 
   // TODO: add more parameters as needed
+  glm::mat4 modelMatrix= glm::mat4{1};
+  glm::vec3 movement = {(float)  (-10 + rand() % 20 +1) / 10000,(float)  (-10 + rand() % 20 +1) / 10000,(float)  -( rand() % 20 +1) / 100};
+  glm::vec3 color =  {(float) (rand() % 100) / 100,(float) (rand() % 100) / 100,(float) (rand() % 100) / 100};
+
 public:
   /// Construct a new Particle
   /// \param p - Initial position
   /// \param s - Initial speed
   /// \param c - Color of particle
-  Particle(glm::vec3 p, glm::vec3 s, glm::vec3 c) {
+//  Particle(glm::vec3 p, glm::vec3 s, glm::vec3 c) {
+  Particle() {
     // First particle will initialize resources
     if (!shader) shader = std::make_unique<ppgso::Shader>(color_vert_glsl, color_frag_glsl);
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("sphere.obj");
@@ -84,6 +91,7 @@ public:
 
   bool update(float dTime, Scene &scene) override {
     // TODO: Animate position using speed and dTime.
+      return true;
     // - Return true to keep the object alive
     // - Returning false removes the object from the scene
     // - hint: you can add more particles to the scene here also
@@ -91,6 +99,15 @@ public:
 
   void render(const Camera& camera) override {
     // TODO: Render the object
+        shader->use();
+        shader->setUniform("OverallColor", color);
+
+        modelMatrix = translate(modelMatrix,movement);
+
+        shader->setUniform("ModelMatrix", modelMatrix);
+      shader->setUniform("ProjectionMatrix", camera.projectionMatrix);
+      shader->setUniform("ViewMatrix", camera.viewMatrix);
+        mesh->render();
     // - Use the shader
     // - Setup all needed shader inputs
     // - hint: use OverallColor in the color_vert_glsl shader for color
@@ -124,6 +141,8 @@ public:
     keys[key] = action;
     if (keys[GLFW_KEY_SPACE]) {
       // TODO: Add renderable object to the scene
+        auto obj = std::make_unique<Particle>();
+        scene.push_back(move(obj));
     }
   }
 
@@ -146,6 +165,7 @@ public:
     auto i = std::begin(scene);
     while (i != std::end(scene)) {
       // Update object and remove from list if needed
+//      auto obj = scene.;
       auto obj = i->get();
       if (!obj->update(dTime, scene))
         i = scene.erase(i);
@@ -153,6 +173,7 @@ public:
         ++i;
     }
 
+camera.update();
     // Render every object in scene
     for(auto& object : scene) {
       object->render(camera);
