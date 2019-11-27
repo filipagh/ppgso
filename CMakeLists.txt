@@ -67,6 +67,7 @@ set(PPGSO_SHADER_SRC
         shader/convolution_vert.glsl shader/convolution_frag.glsl
         shader/diffuse_vert.glsl shader/diffuse_frag.glsl
         shader/texture_vert.glsl shader/texture_frag.glsl
+        shader/diffuse_frag_light.glsl
         )
 add_resources(shaders ${PPGSO_SHADER_SRC})
 
@@ -160,6 +161,12 @@ install(TARGETS gl7_diffuse DESTINATION .)
 add_executable(gl8_framebuffer src/gl8_framebuffer/gl8_framebuffer.cpp)
 target_link_libraries(gl8_framebuffer ppgso shaders)
 install(TARGETS gl8_framebuffer DESTINATION .)
+
+FILE(GLOB SRCFILES src/projekt/*.cpp)
+# projekt
+add_executable(projekt  ${SRCFILES} )
+target_link_libraries(projekt ppgso shaders)
+install(TARGETS projekt DESTINATION .)
 
 # gl9_scene
 add_executable(gl9_scene
