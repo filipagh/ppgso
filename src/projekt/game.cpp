@@ -159,6 +159,13 @@ private:
         obj->rotation = {90*ppgso::PI/180,0,0};
         scene.objects.push_back(move(obj));
 
+        obj = std::make_unique<Wall>();
+        obj->scale = {2.0f,2.0f,2.00f};
+        obj->position = {0,0,0};
+        obj->rotation = {0,0,-45*ppgso::PI/180};
+        scene.objects.push_back(move(obj));
+
+
         std::unique_ptr<Player> objPlayer;
         objPlayer = std::make_unique<Player>();
         objPlayer->scale = {10.0f,10.0f,10};
@@ -187,7 +194,8 @@ public:
         keys[key] = action;
         if (keys[GLFW_KEY_SPACE]) {
             // TODO: Add renderable object to the scene
-            addParticle();
+            int i = 5;
+//            addParticle();
         }
     }
     void onIdle() override {
@@ -204,8 +212,8 @@ public:
         // Because we need to delete while iterating this is implemented using c++ iterators
         // In most languages mutating the container during iteration is undefined behaviour
 
-
-
+//        time/=10;
+        scene.lightDirection = {3*sin(time),0,3*cos(time)};
         scene.update(time,dTime);
         scene.render();
 
