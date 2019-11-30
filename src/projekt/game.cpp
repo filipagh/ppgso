@@ -2,8 +2,12 @@
 #include "scene.h"
 #include "player.h"
 #include "garage.h"
+#include "game.h"
+#include "space.h"
+
 
 #include <iostream>
+#include <utility>
 #include <vector>
 #include <map>
 #include <list>
@@ -17,48 +21,47 @@
 #include <shaders/color_frag_glsl.h>
 const unsigned int SIZE = 1028;
 
-class ParticleWindow : public ppgso::Window {
-private:
+Scene* ParticleWindow::activScene = nullptr;
+
+
+
     // Scene of objects
 
-    Scene* activScene;
-    std::unique_ptr<Camera> camera;
-    // Store keyboard state
-//    std::map<int, int> keys;
-
+//    std::unique_ptr<Camera> camera;
 //    void initSceneGame() {
-//        camera = std::make_unique<Camera>(120.0f, 1.0f, 0.1f, 1000.0f);
-//        camera->position = glm::vec3{0.0f, 0.0f, 10.0f};
-//        camera->back = camera->position;
-//        camera->up = glm::vec3{0.0f, 1.0f, 0.0f};
-//        sceneGame.camera = move(camera);
-//
-//        std::unique_ptr<Player> objPlayer;
-//        objPlayer = std::make_unique<Player>();
-//        objPlayer->scale = {10.0f,10.0f,10};
-//        objPlayer->position = {0,-4,0};
-//        objPlayer->rotation = {90*ppgso::PI/180,0,0};
-//        sceneGame.objects.push_back(move(objPlayer));
+
 //    }
+//        sceneGame.objects.push_back(move(objPlayer));
+//        objPlayer->rotation = {90*ppgso::PI/180,0,0};
+//        objPlayer->position = {0,-4,0};
+//        objPlayer->scale = {10.0f,10.0f,10};
+//        objPlayer = std::make_unique<Player>();
+//        std::unique_ptr<Player> objPlayer;
+//
+//        camera->up = glm::vec3{0.0f, 1.0f, 0.0f};
+//        camera->back = camera->position;
+//        camera->position = glm::vec3{0.0f, 0.0f, 10.0f};
+//        camera = std::make_unique<Camera>(120.0f, 1.0f, 0.1f, 1000.0f);
+//        sceneGame.camera = move(camera);
+//    std::map<int, int> keys;
+    // Store keyboard state
 
-public:
+//public:
+
+//    Scene* activScene;
 
 
-     void changeScene(Scene *scene,bool init) {
-        activScene = scene;
-        activScene->init();
-    }
 
-    ParticleWindow() : Window{"task7_particles", SIZE, SIZE} {
+
+    ParticleWindow::ParticleWindow(std::string title, int width, int height) : Window(std::move(title), width, height) {
         // Initialize OpenGL state
         // Enable Z-buffer
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
-
     }
-    void onKey(int key, int scanCode, int action, int mods) override {
+    void ParticleWindow::onKey(int key, int scanCode, int action, int mods)  {
         // Collect key state in a map
-        activScene->keyEvent(key, scanCode, action, mods);
+        ParticleWindow::activScene->keyEvent(key, scanCode, action, mods);
 
 //        keys[key] = action;
 //        if (keys[GLFW_KEY_SPACE]) {
@@ -67,7 +70,7 @@ public:
 ////            addParticle();
 //    }
     }
-    void onIdle() override {
+    void ParticleWindow::onIdle() {
         // Track time
         static auto time = (float) glfwGetTime();
         // Compute time delta
@@ -87,17 +90,26 @@ public:
         activScene->render();
 
     }
-};
+
 int main() {
     // Create new window
-    auto window = ParticleWindow{};
-
+    auto window = ParticleWindow{"task7_particles", SIZE, SIZE};
     Garage sceneGarage = {};
-//    ParticleWindow::changeScene(&sceneGarage, true);
-    window.changeScene(&sceneGarage, true);
+    ParticleWindow::changeScene(&sceneGarage, true);
+//    window.changeScene(&sceneGarage, true);
 
 
     // Main execution loop
     while (window.pollEvents()) {}
     return EXIT_SUCCESS;
+}
+
+void ParticleWindow::changeScene(Scene *scene, bool init) {
+        if (ParticleWindow::activScene != nullptr) {
+//            free(ParticleWindow::activScene);
+        }
+        ParticleWindow::activScene = scene;
+        if (init) {
+            ParticleWindow::activScene->init();
+        }
 }

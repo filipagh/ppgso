@@ -4,6 +4,7 @@
 #include "garage.h"
 #include "wall.h"
 #include "space.h"
+#include "game.h"
 //#include "projectile.h"
 //#include "explosion.h"
 
@@ -37,10 +38,8 @@ void Space::init() {
     objPlayer = std::make_unique<Player>();
     objPlayer->scale = {10.0f,10.0f,10};
     objPlayer->position = {0,0,0};
-    objPlayer->rotation = {90*ppgso::PI/180,0,0};
+//    objPlayer->rotation = {90*ppgso::PI/180,0,0};
     objects.push_back(move(objPlayer));
-
-
 }
 
 void Space::keyEvent(int key, int scanCode, int action, int mods) {
@@ -48,8 +47,12 @@ void Space::keyEvent(int key, int scanCode, int action, int mods) {
 //    if (key == GLFW_KEY_SPACE) {
 //        // TODO: Add renderable object to the scene
 //        int i = 5;
-//        addParticle();
-//    }
+//        addParticle();//
+        if (key == GLFW_KEY_G && action == GLFW_PRESS) {
+        // TODO: Add renderable object to the scene
+            Garage* garageSpace = new Garage();
+            ParticleWindow::changeScene(garageSpace, true);
+    }
 }
 
 //void Garage::addParticle() {
