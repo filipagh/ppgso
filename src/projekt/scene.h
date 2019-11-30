@@ -26,6 +26,11 @@ class Scene {
      */
     void render();
 
+    virtual void init() {};
+
+    virtual void keyEvent(int key, int scanCode, int action, int mods) {};
+
+
     /*!
      * Pick objects using a ray
      * @param position - Position in the scene to pick object from

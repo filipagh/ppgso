@@ -14,7 +14,7 @@ void Camera::update(float time) {
 
 //  viewMatrix = lookAt(position, position-back, up);
 //  double angle = 90 * fmodf(time,4.0f);
-
+        time/=10;
 //    position = {5*sin(time),0,5*cos(time)};
 
 //  viewMatrix = glm::mat4{1};

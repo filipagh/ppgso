@@ -1,9 +1,7 @@
-#include "game.h"
 #include "camera.h"
 #include "scene.h"
-#include "asteroid.h"
-#include "wall.h"
 #include "player.h"
+#include "garage.h"
 
 #include <iostream>
 #include <vector>
@@ -18,168 +16,38 @@
 #include <shaders/color_vert_glsl.h>
 #include <shaders/color_frag_glsl.h>
 const unsigned int SIZE = 1028;
-/// Abstract renderable object interface
-//class Renderable; // Forward declaration for Scene
-////using Scene = std::list<std::unique_ptr<Renderable>>; // Type alias
-//class Renderable {
-//public:
-//    // Virtual destructor is needed for abstract interfaces
-//    virtual ~Renderable() = default;
-//    /// Render the object
-//    /// \param camera - Camera to use for rendering
-//    virtual void render(const Camera& camera) = 0;
-//    /// Update the object. Useful for specifing animation and behaviour.
-//    /// \param dTime - Time delta
-//    /// \param scene - Scene reference
-//    /// \return - Return true to keep object in scene
-//    virtual bool update(float dTime, Scene &scene) = 0;
-//};
-///// Basic particle that will render a sphere
-///// TODO: Implement Renderable particle
-//class Particle final : public Renderable {
-//    // Static resources shared between all particles
-//    static std::unique_ptr<ppgso::Mesh> mesh;
-//    static std::unique_ptr<ppgso::Shader> shader;
-//    // TODO: add more parameters as needed
-//    bool isRocket = true;
-//    glm::mat4 modelMatrix= glm::mat4{1};
-//    glm::vec3 movement = {(float)  (-10 + rand() % 20 +1) / 1000000,(float)  (-10 + rand() % 20 +1) / 1000000,(float)  -( rand() % 20 +1) / 100};
-//    glm::vec3 position = {0.0f,0.0f,0.0f};
-//    glm::vec3 color =  {(float) (rand() % 100) / 100,(float) (rand() % 100) / 100,(float) (rand() % 100) / 100};
-//    void addParticle(Scene &scene, const glm::vec3 &position, const glm::vec3 &movement, const glm::vec3 &colorParent) {
-//        auto obj = std::make_unique<Particle>(position, movement, colorParent);
-//        scene.push_back(move(obj));
-//    }
-//public:
-//    /// Construct a new Particle
-//    /// \param p - Initial position
-//    /// \param s - Initial speed
-//    /// \param c - Color of particle
-////  Particle(glm::vec3 p, glm::vec3 s, glm::vec3 c) {
-//    Particle(const glm::vec3 &positionParent, const glm::vec3 &move, const glm::vec3 &colorParent) {
-//        // First particle will initialize resources
-//        isRocket = false;
-//        this->position = positionParent;
-//        movement = move;
-//        color = colorParent;
-//        if (!shader) shader = std::make_unique<ppgso::Shader>(color_vert_glsl, color_frag_glsl);
-//        if (!mesh) mesh = std::make_unique<ppgso::Mesh>("sphere.obj");
-//    }
-//    Particle() {
-//        // First particle will initialize resources
-//        if (!shader) shader = std::make_unique<ppgso::Shader>(color_vert_glsl, color_frag_glsl);
-//        if (!mesh) mesh = std::make_unique<ppgso::Mesh>("sphere.obj");
-//    }
-//    bool update(float dTime, Scene &scene) override {
-//        // TODO: Animate position using speed and dTime.
-//        if (this->isRocket && this->position[2] < -100) {
-//            addParticle(scene, this->position, {0.1f, 0, 0}, this->color);
-//            addParticle(scene, this->position, {0, 0.1f, 0}, this->color);
-//            addParticle(scene, this->position, {-0.1f, 0, 0}, this->color);
-//            addParticle(scene, this->position, {0, -0.1f, 0}, this->color);
-//            return false;
-//        }
-//        return true;
-//        // - Return true to keep the object alive
-//        // - Returning false removes the object from the scene
-//        // - hint: you can add more particles to the scene here also
-//    }
-//    void render(const Camera& camera) override {
-//        // TODO: Render the object
-//        shader->use();
-//        shader->setUniform("OverallColor", color);
-//        position.operator+=(movement);
-//        modelMatrix = translate(glm::mat4{1},position);
-//        shader->setUniform("ModelMatrix", modelMatrix);
-//        shader->setUniform("ProjectionMatrix", camera.projectionMatrix);
-//        shader->setUniform("ViewMatrix", camera.viewMatrix);
-//        mesh->render();
-//        // - Use the shader
-//        // - Setup all needed shader inputs
-//        // - hint: use OverallColor in the color_vert_glsl shader for color
-//        // - Render the mesh
-//    }
-//};
-// Static resources need to be instantiated outside of the class as they are globals
-//std::unique_ptr<ppgso::Mesh> Particle::mesh;
-//std::unique_ptr<ppgso::Shader> Particle::shader;
+
 class ParticleWindow : public ppgso::Window {
 private:
     // Scene of objects
-    Scene scene;
+
+    Scene* activScene;
     std::unique_ptr<Camera> camera;
     // Store keyboard state
-    std::map<int, int> keys;
-    void addParticle() {
-        auto obj = std::make_unique<Asteroid>();
-        obj->scale = {10,1,1};
-        scene.objects.push_back(move(obj));
-    }
+//    std::map<int, int> keys;
 
-    void initSceneGarage() {
-        scene.lightDirection = {2,5,0};
-         camera = std::make_unique<Camera>(120.0f, 1.0f, 0.1f, 1000.0f);
-         camera->position = glm::vec3{0.0f, 0.0f, 4.0f};
-         camera->back = camera->position;
-         camera->up = glm::vec3{0.0f, 1.0f, 0.0f};
-        scene.camera = move(camera);
-        std::unique_ptr<Wall> obj;
-        obj = std::make_unique<Wall>();
-        obj->scale = {10.0f,10.0f,.01f};
-        obj->position = {0,0,-5.0f};
-        scene.objects.push_back(move(obj));
+//    void initSceneGame() {
+//        camera = std::make_unique<Camera>(120.0f, 1.0f, 0.1f, 1000.0f);
+//        camera->position = glm::vec3{0.0f, 0.0f, 10.0f};
+//        camera->back = camera->position;
+//        camera->up = glm::vec3{0.0f, 1.0f, 0.0f};
+//        sceneGame.camera = move(camera);
+//
+//        std::unique_ptr<Player> objPlayer;
+//        objPlayer = std::make_unique<Player>();
+//        objPlayer->scale = {10.0f,10.0f,10};
+//        objPlayer->position = {0,-4,0};
+//        objPlayer->rotation = {90*ppgso::PI/180,0,0};
+//        sceneGame.objects.push_back(move(objPlayer));
+//    }
 
-        obj = std::make_unique<Wall>();
-        obj->scale = {10.0f,10.0f,.01f};
-        obj->position = {5,0,0};
-        obj->rotation = {0,0,-90*ppgso::PI/180};
-        scene.objects.push_back(move(obj));
-
-        obj = std::make_unique<Wall>();
-        obj->scale = {10.0f,10.0f,.01f};
-        obj->position = {-5,0,0};
-        obj->rotation = {0,0,-90*ppgso::PI/180};
-        scene.objects.push_back(move(obj));
-
-        obj = std::make_unique<Wall>();
-        obj->scale = {10.0f,10.0f,.01f};
-        obj->position = {0,0,5};
-        obj->rotation = {0,0,0};
-        scene.objects.push_back(move(obj));
-
-        obj = std::make_unique<Wall>();
-        obj->scale = {10.0f,10.0f,.01f};
-        obj->position = {0,-5,0};
-        obj->rotation = {90*ppgso::PI/180,0,0};
-        scene.objects.push_back(move(obj));
-
-        obj = std::make_unique<Wall>();
-        obj->scale = {10.0f,10.0f,.01f};
-        obj->position = {0,5,0};
-        obj->rotation = {90*ppgso::PI/180,0,0};
-        scene.objects.push_back(move(obj));
-
-        obj = std::make_unique<Wall>();
-        obj->scale = {2.0f,2.0f,2.00f};
-        obj->position = {0,0,0};
-        obj->rotation = {0,0,-45*ppgso::PI/180};
-        scene.objects.push_back(move(obj));
-
-
-        std::unique_ptr<Player> objPlayer;
-        objPlayer = std::make_unique<Player>();
-        objPlayer->scale = {10.0f,10.0f,10};
-        objPlayer->position = {0,-4,0};
-        objPlayer->rotation = {90*ppgso::PI/180,0,0};
-        scene.objects.push_back(move(objPlayer));
-
-
-        addParticle();
-
-
-
-    }
 public:
+
+
+     void changeScene(Scene *scene,bool init) {
+        activScene = scene;
+        activScene->init();
+    }
 
     ParticleWindow() : Window{"task7_particles", SIZE, SIZE} {
         // Initialize OpenGL state
@@ -187,16 +55,17 @@ public:
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
 
-        initSceneGarage();
     }
     void onKey(int key, int scanCode, int action, int mods) override {
         // Collect key state in a map
-        keys[key] = action;
-        if (keys[GLFW_KEY_SPACE]) {
-            // TODO: Add renderable object to the scene
-            int i = 5;
-//            addParticle();
-        }
+        activScene->keyEvent(key, scanCode, action, mods);
+
+//        keys[key] = action;
+//        if (keys[GLFW_KEY_SPACE]) {
+//            // TODO: Add renderable object to the scene
+//            int i = 5;
+////            addParticle();
+//    }
     }
     void onIdle() override {
         // Track time
@@ -213,30 +82,21 @@ public:
         // In most languages mutating the container during iteration is undefined behaviour
 
 //        time/=10;
-        scene.lightDirection = {3*sin(time),0,3*cos(time)};
-        scene.update(time,dTime);
-        scene.render();
+        activScene->lightDirection =    {3*sin(time),0,3*cos(time)};
+        activScene->update(time,dTime);
+        activScene->render();
 
-
-//        auto i = std::begin(scene);
-//        while (i != std::end(scene)) {
-//            // Update object and remove from list if needed
-////      auto obj = scene.;
-//            auto obj = i->get();
-//            if (!obj->update(dTime, scene))
-//                i = scene.erase(i);
-//            else
-//                ++i;
-//        }
-//        // Render every object in scene
-//        for(auto& object : scene) {
-//            object->render(*camera);
-//        }
     }
 };
 int main() {
     // Create new window
     auto window = ParticleWindow{};
+
+    Garage sceneGarage = {};
+//    ParticleWindow::changeScene(&sceneGarage, true);
+    window.changeScene(&sceneGarage, true);
+
+
     // Main execution loop
     while (window.pollEvents()) {}
     return EXIT_SUCCESS;

@@ -30,19 +30,37 @@ out vec4 FragmentColor;
 
 void main() {
   // Compute diffuse lighting
-  float diffuse = max(dot(normal, vec4(normalize(LightDirection), 1.0f)), 0.15f);
 
+  vec3 norm = normalize(normal_V3);
   vec3 lightDir = normalize(LightDirection - fragPos);
+  float diff = max(dot(norm,lightDir),0.0);
+
   vec3 viewDir = normalize(ViewPosition - fragPos);
-  vec3 reflectDir = reflect(-lightDir, normalize(normal_V3));
+  vec3 reflectDir = reflect(lightDir, norm);
+
+
+
+
+
+//  float diffuse = max(dot(normal, vec4(normalize(LightDirection), 1.0f)), 0.15f);
+
+//  vec3 lightDir = normalize(LightDirection - fragPos);
+//  vec3 viewDir = normalize(ViewPosition - fragPos);
+//  vec3 reflectDir = reflect(-lightDir, normalize(normal_V3));
+
+//    vec4 lightDir = vec4(normalize(LightDirection),1.0f);
+//    vec4 viewDir = vec4(normalize(ViewPosition),1.0f);
+//    vec4 reflectDir = reflect(-lightDir, normal);
 
 //  vec4 lightDir = vec4(normalize(LightDirection - fragPos),1.0f);
 //  vec4 viewDir = vec4(normalize(ViewPosition - fragPos),1.0f);
 //  vec4 reflectDir = reflect(-lightDir, normal);
 
-  float spec = pow(max(dot(viewDir, reflectDir), 0.0), 8);
+  float spec = pow(max(dot(viewDir, reflectDir), 0.0), 128);
 
-  float finalLightIntensity = max(diffuse,spec);
+//  float finalLightIntensity = max(diffuse,spec);
+
+  float finalLightIntensity = diff+spec;
   // Lookup the color in Texture on coordinates given by texCoord
   // NOTE: Texture coordinate is inverted vertically for compatibility with OBJ
   FragmentColor = texture(Texture, vec2(texCoord.x, 1.0 - texCoord.y) + TextureOffset) * finalLightIntensity;
