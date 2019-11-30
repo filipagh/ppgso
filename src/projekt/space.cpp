@@ -18,7 +18,7 @@
 
 Space::Space() {
 
-  // Scale the default model
+    // Scale the default model
 //  scale *= 3.0f;
 //
 //  // Initialize static resources if needed
@@ -27,18 +27,18 @@ Space::Space() {
 //  if (!mesh) mesh = std::make_unique<ppgso::Mesh>("corsair.obj");
 }
 
+std::unique_ptr<Player> objPlayer;
+
 void Space::init() {
     camera = std::make_unique<Camera>(120.0f, 1.0f, 0.1f, 1000.0f);
-    camera->position = glm::vec3{0.0f, 0.0f, 10.0f};
+    camera->position = glm::vec3{0.0f, 0.0f, 30.0f};
     camera->back = camera->position;
     camera->up = glm::vec3{0.0f, 1.0f, 0.0f};
     camera = move(camera);
 
-    std::unique_ptr<Player> objPlayer;
     objPlayer = std::make_unique<Player>();
-    objPlayer->scale = {10.0f,10.0f,10};
-    objPlayer->position = {0,0,0};
-//    objPlayer->rotation = {90*ppgso::PI/180,0,0};
+    objPlayer->scale = {10,10,10};
+    objPlayer->position = {0, 0, 0};
     objects.push_back(move(objPlayer));
 }
 
@@ -48,21 +48,37 @@ void Space::keyEvent(int key, int scanCode, int action, int mods) {
 //        // TODO: Add renderable object to the scene
 //        int i = 5;
 //        addParticle();//
-        if (key == GLFW_KEY_G && action == GLFW_PRESS) {
-        // TODO: Add renderable object to the scene
-            Garage* garageSpace = new Garage();
-            ParticleWindow::changeScene(garageSpace, true);
+    if (key == GLFW_KEY_G && action == GLFW_PRESS) {
+        Garage *garageSpace = new Garage();
+        ParticleWindow::changeScene(garageSpace, true);
+    } else if (key == GLFW_KEY_W) {
+       getPlayer()->acceleration = getPlayer()->acceleration + glm::vec3{0,1,0};
+    } else if (key == GLFW_KEY_A) {
+       getPlayer()->acceleration = getPlayer()->acceleration + glm::vec3{-1,0,0};
+    } else if (key == GLFW_KEY_S) {
+       getPlayer()->acceleration = getPlayer()->acceleration + glm::vec3{0,-1,0};
+    } else if (key == GLFW_KEY_D) {
+       getPlayer()->acceleration = getPlayer()->acceleration + glm::vec3{1,0,0};
     }
+
 }
 
-//void Garage::addParticle() {
-//    auto obj = std::make_unique<Asteroid>();
-//    obj->scale = {10,1,1};
-//    objects.push_back(move(obj));
-//}
+void Space::render() {
+    Scene::render();
+}
 
+void Space::update(float time, float dTime) {
+    lightDirection = {1, 1, 1};
+    Scene::update(time, dTime);
+    camera->position = getPlayer()->position + glm::vec3{0,0,30};
+    camera->back = glm::vec3{0,0,30};
+    camera->update(time);
+}
 
-
+Object * Space::getPlayer() {
+    auto p = std::begin(objects)->get();
+    return p;
+}
 //bool Player::update(Scene &scene, float dt) {
 ////  // Fire delay increment
 ////  fireDelay += dt;

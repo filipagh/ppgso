@@ -19,12 +19,6 @@ class Scene {
      * Update all objects in the scene
      * @param time
      */
-    void update(float time,float dTime);
-
-    /*!
-     * Render all objects in the scene
-     */
-    void render();
 
     virtual void init() {};
 
@@ -56,6 +50,15 @@ class Scene {
       double x, y;
       bool left, right;
     } cursor;
+
+    virtual /*!
+ * Render all objects in the scene
+ */
+
+void update(float time,float dTime);
+
+    virtual void render();
+
 };
 
 #endif // _PPGSO_SCENE_H

@@ -25,32 +25,10 @@ Scene* ParticleWindow::activScene = nullptr;
 
 
 
-    // Scene of objects
-
-//    std::unique_ptr<Camera> camera;
-//    void initSceneGame() {
-
-//    }
-//        sceneGame.objects.push_back(move(objPlayer));
-//        objPlayer->rotation = {90*ppgso::PI/180,0,0};
-//        objPlayer->position = {0,-4,0};
-//        objPlayer->scale = {10.0f,10.0f,10};
-//        objPlayer = std::make_unique<Player>();
-//        std::unique_ptr<Player> objPlayer;
-//
-//        camera->up = glm::vec3{0.0f, 1.0f, 0.0f};
-//        camera->back = camera->position;
-//        camera->position = glm::vec3{0.0f, 0.0f, 10.0f};
-//        camera = std::make_unique<Camera>(120.0f, 1.0f, 0.1f, 1000.0f);
-//        sceneGame.camera = move(camera);
 //    std::map<int, int> keys;
     // Store keyboard state
 
 //public:
-
-//    Scene* activScene;
-
-
 
 
     ParticleWindow::ParticleWindow(std::string title, int width, int height) : Window(std::move(title), width, height) {

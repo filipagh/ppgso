@@ -12,6 +12,7 @@ std::unique_ptr<ppgso::Mesh> Player::mesh;
 std::unique_ptr<ppgso::Texture> Player::texture;
 std::unique_ptr<ppgso::Shader> Player::shader;
 
+
 Player::Player() {
   // Scale the default model
   scale *= 3.0f;
@@ -71,6 +72,11 @@ bool Player::update(Scene &scene, float dt) {
 //    scene.objects.push_back(move(projectile));
 //  }
 
+if (acceleration != glm::vec3{0,0,0}) {
+    speed += acceleration * 0.01f;
+    acceleration = {0,0,0};
+}
+    position += speed * dt;
   generateModelMatrix();
   return true;
 }

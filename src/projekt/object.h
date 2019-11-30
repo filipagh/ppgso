@@ -48,7 +48,8 @@ public:
   glm::vec3 rotation{0,0,0};
   glm::vec3 scale{1,1,1};
   glm::mat4 modelMatrix{1};
-
+  glm::vec3 speed{0,0,0};
+  glm::vec3 acceleration{0,0,0};
 protected:
   /*!
    * Generate modelMatrix from position, rotation and scale

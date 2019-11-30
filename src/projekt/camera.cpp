@@ -22,7 +22,7 @@ void Camera::update(float time) {
 //    viewMatrix = rotate(viewMatrix,time,{0,1.0f,0});
 //    glm::mat4 aa = viewMatrix;
 //    position = {aa[3][0],aa[3][1],aa[3][2]};
-    viewMatrix = glm::lookAt(position, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 1.0f, 0.0f});
+    viewMatrix = glm::lookAt(position, position-back, glm::vec3{0.0f, 1.0f, 0.0f});
     }
 
 glm::vec3 Camera::cast(double u, double v) {

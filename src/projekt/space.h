@@ -22,10 +22,11 @@ public:
 
     void keyEvent(int key, int scanCode, int action, int mods) override;
 
-//  /*!
-//   * Player click event
-//   * @param scene
-//   */
-//  void onClick(Scene &scene) override ;
+
+    void render() override ;
+
+    void update(float time, float dTime) override ;
+
+    Object * getPlayer();
 };
 
