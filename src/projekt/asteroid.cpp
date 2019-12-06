@@ -1,5 +1,8 @@
 #include <glm/gtc/random.hpp>
 #include "asteroid.h"
+#include "player.h"
+#include "garage.h"
+#include "game.h"
 //#include "projectile.h"
 //#include "explosion.h"
 
@@ -15,12 +18,12 @@ std::unique_ptr<ppgso::Shader> Asteroid::shader;
 
 Asteroid::Asteroid() {
   // Set random scale speed and rotation
-    this->position = {0.0f,0.0f,0.0f};
-    this->moveVector = {(float)  (-10 + rand() % 20 +1) / 1000000,(float)  (-10 + rand() % 20 +1) / 1000000,(float)  -( rand() % 20 +1) / 100};
+//    this->position = {0.0f,0.0f,0.0f};
+//    this->moveVector = {(float)  (-10 + rand() % 20 +1) / 1000000,(float)  (-10 + rand() % 20 +1) / 1000000,(float)  -( rand() % 20 +1) / 100};
 
 
-  scale *= glm::linearRand(1.0f, 3.0f);
-  speed = {glm::linearRand(-2.0f, 2.0f), glm::linearRand(-5.0f, -10.0f), 0.0f};
+//  scale *= glm::linearRand(1.0f, 3.0f);
+//  speed = {glm::linearRand(-2.0f, 2.0f), glm::linearRand(-5.0f, -10.0f), 0.0f};
 //  rotation = glm::ballRand(ppgso::PI);
 //  rotMomentum = glm::ballRand(ppgso::PI);
 
@@ -34,57 +37,38 @@ Asteroid::Asteroid() {
 bool Asteroid::update(Scene &scene, float dt) {
 
 
+  // Collide with scene
+  for (auto &obj : scene.objects) {
+    // Ignore self in scene
+    if (obj.get() == this) continue;
 
-  // Count time alive
-//  age += dt;
-//
-//  // Animate position according to time
-//  position += speed * dt;
-//
-//  // Rotate the object
-//  rotation += rotMomentum * dt;
-//
-//  // Delete when alive longer than 10s or out of visibility
-//  if (age > 10.0f || position.y < -10) return false;
-//
-//  // Collide with scene
-//  for (auto &obj : scene.objects) {
-//    // Ignore self in scene
-//    if (obj.get() == this) continue;
-//
-//    // We only need to collide with asteroids and projectiles, ignore other objects
-//    auto asteroid = dynamic_cast<Asteroid*>(obj.get()); // dynamic_pointer_cast<Asteroid>(obj);
+    // We only need to collide with asteroids and projectiles, ignore other objects
+    auto asteroid = dynamic_cast<Asteroid*>(obj.get()); // dynamic_pointer_cast<Asteroid>(obj);
 //    auto projectile = dynamic_cast<Projectile*>(obj.get()); //dynamic_pointer_cast<Projectile>(obj);
-//    if (!asteroid && !projectile) continue;
-//
-//    // When colliding with other asteroids make sure the object is older than .5s
-//    // This prevents excessive collisions when asteroids explode.
-//    if (asteroid && age < 0.5f) continue;
-//
-//    // Compare distance to approximate size of the asteroid estimated from scale.
-//    if (distance(position, obj->position) < (obj->scale.y + scale.y) * 0.7f) {
-//      int pieces = 3;
-//
-//      // Too small to split into pieces
-//      if (scale.y < 0.5) pieces = 0;
-//
-//      // The projectile will be destroyed
-//      if (projectile) projectile->destroy();
-//
-//      // Generate smaller asteroids
-//      explode(scene, (obj->position + position) / 2.0f, (obj->scale + scale) / 2.0f, pieces);
-//
-//      // Destroy self
-//      return false;
-//    }
-//  }
-//
-//  // Generate modelMatrix from position, rotation and scale
-//  generateModelMatrix();
-//
-//  return true;
+    auto player = dynamic_cast<Player*>(obj.get()); //dynamic_pointer_cast<Projectile>(obj);
+    if (!asteroid && !player) continue;
 
-    this->position.operator+=(this->moveVector);
+    // Compare distance to approximate size of the asteroid estimated from scale.
+    if (distance(position, obj->position) < (obj->scale.y + scale.y) * 0.7f) {
+
+        if (player) {
+            Garage *sceneGarage = new Garage();
+            ParticleWindow::changeScene(sceneGarage, true);
+            return false;
+        }
+
+      // The projectile will be destroyed
+      if (asteroid) {
+          asteroid->speed += speed;
+          asteroid->acceleration += acceleration;
+          return false;
+      }
+    }
+  }
+
+
+/////////////
+    position+=speed;
     generateModelMatrix();
     return true;
 }

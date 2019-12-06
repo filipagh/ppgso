@@ -74,7 +74,7 @@ void Garage::init() {
 
     obj = std::make_unique<Wall>();
     obj->scale = {2.0f,2.0f,2.00f};
-    obj->position = {0,0,0};
+    obj->position = {1,0,-1};
     obj->rotation = {0,0,-45*ppgso::PI/180};
     objects.push_back(move(obj));
 
@@ -103,6 +103,11 @@ void Garage::keyEvent(int key, int scanCode, int action, int mods) {
     }
 
 
+}
+
+void Garage::update(float time, float dTime) {
+    lightDirection = {-2,0,0};
+    Scene::update(time, dTime);
 }
 
 void Garage::addParticle() {

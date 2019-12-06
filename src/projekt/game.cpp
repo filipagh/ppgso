@@ -22,6 +22,7 @@
 const unsigned int SIZE = 1028;
 
 Scene* ParticleWindow::activScene = nullptr;
+Scene* ParticleWindow::rendersScene = nullptr;
 
 
 
@@ -39,7 +40,7 @@ Scene* ParticleWindow::activScene = nullptr;
     }
     void ParticleWindow::onKey(int key, int scanCode, int action, int mods)  {
         // Collect key state in a map
-        ParticleWindow::activScene->keyEvent(key, scanCode, action, mods);
+        ParticleWindow::rendersScene->keyEvent(key, scanCode, action, mods);
 
 //        keys[key] = action;
 //        if (keys[GLFW_KEY_SPACE]) {
@@ -63,9 +64,11 @@ Scene* ParticleWindow::activScene = nullptr;
         // In most languages mutating the container during iteration is undefined behaviour
 
 //        time/=10;
-        activScene->lightDirection =    {3*sin(time),0,3*cos(time)};
-        activScene->update(time,dTime);
-        activScene->render();
+
+        rendersScene = activScene;
+        rendersScene->lightDirection = {3*sin(time),0,3*cos(time)};
+        rendersScene->update(time,dTime);
+        rendersScene->render();
 
     }
 

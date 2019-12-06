@@ -79,6 +79,7 @@ void Wall::render(Scene &scene) {
 
   // Set up light
   shader->setUniform("LightDirection", scene.lightDirection);
+  shader->setUniform("ViewPosition", scene.camera->position);
 
   // use camera
   shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);

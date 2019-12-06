@@ -36,5 +36,6 @@ public:
 //   * @param scene
 //   */
 //  void onClick(Scene &scene) override ;
+    void update(float time, float dTime);
 };
 

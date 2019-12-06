@@ -32,19 +32,23 @@ void main() {
   // Compute diffuse lighting
 
   vec3 norm = normalize(normal_V3);
-  vec3 lightDir = normalize(LightDirection - fragPos);
+  vec3 lightDir = LightDirection;
   float diff = max(dot(norm,lightDir),0.0);
 
+
+//  vec3 viewDir = normalize(ViewPosition - fragPos);
+//  vec3 reflectDir = reflect(-lightDir, norm);
+
   vec3 viewDir = normalize(ViewPosition - fragPos);
-  vec3 reflectDir = reflect(lightDir, norm);
+  vec4 reflectDir = reflect(-lightDir, normal);
 
 
 
 
 
 //  float diffuse = max(dot(normal, vec4(normalize(LightDirection), 1.0f)), 0.15f);
-
-//  vec3 lightDir = normalize(LightDirection - fragPos);
+//
+//  vec3 lightDir = LightDirection;
 //  vec3 viewDir = normalize(ViewPosition - fragPos);
 //  vec3 reflectDir = reflect(-lightDir, normalize(normal_V3));
 
@@ -58,9 +62,13 @@ void main() {
 
   float spec = pow(max(dot(viewDir, reflectDir), 0.0), 128);
 
+
+
 //  float finalLightIntensity = max(diffuse,spec);
 
-  float finalLightIntensity = diff+spec;
+  float finalLightIntensity = spec;
+//  float finalLightIntensity = diff/2+spec;
+  finalLightIntensity = clamp(finalLightIntensity,0,1);
   // Lookup the color in Texture on coordinates given by texCoord
   // NOTE: Texture coordinate is inverted vertically for compatibility with OBJ
   FragmentColor = texture(Texture, vec2(texCoord.x, 1.0 - texCoord.y) + TextureOffset) * finalLightIntensity;

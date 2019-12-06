@@ -10,11 +10,13 @@
 class ParticleWindow : public ppgso::Window  {
 private:
     static Scene* activScene;
-public:
+    static Scene *rendersScene;
 
+public:
     ParticleWindow(std::string title, int width, int height);
     static void changeScene(Scene *scene, bool init);
     void onKey(int key, int scanCode, int action, int mods) override;
+
     void onIdle() override;
 };
 #endif //PPGSO_GAME_H

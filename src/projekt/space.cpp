@@ -40,6 +40,12 @@ void Space::init() {
     objPlayer->scale = {10,10,10};
     objPlayer->position = {0, 0, 0};
     objects.push_back(move(objPlayer));
+
+    auto obj = std::make_unique<Asteroid>();
+    obj->acceleration = {0,0,0};
+    obj->position = {10,0,0};
+    obj->speed = {-1,0,0};
+    objects.push_back(move(obj));
 }
 
 void Space::keyEvent(int key, int scanCode, int action, int mods) {

@@ -168,20 +168,20 @@ add_executable(projekt  ${SRCFILES} )
 target_link_libraries(projekt ppgso shaders)
 install(TARGETS projekt DESTINATION .)
 
-# gl9_scene
-add_executable(gl9_scene
-        src/gl9_scene/gl9_scene.cpp
-        src/gl9_scene/object.cpp
-        src/gl9_scene/scene.cpp
-        src/gl9_scene/camera.cpp
-        src/gl9_scene/asteroid.cpp
-        src/gl9_scene/generator.cpp
-        src/gl9_scene/player.cpp
-        src/gl9_scene/projectile.cpp
-        src/gl9_scene/explosion.cpp
-        src/gl9_scene/space.cpp)
-target_link_libraries(gl9_scene ppgso shaders)
-install(TARGETS gl9_scene DESTINATION .)
+## gl9_scene
+#add_executable(gl9_scene
+#        src/gl9_scene/gl9_scene.cpp
+#        src/gl9_scene/object.cpp
+#        src/gl9_scene/scene.cpp
+#        src/gl9_scene/camera.cpp
+#        src/gl9_scene/asteroid.cpp
+#        src/gl9_scene/generator.cpp
+#        src/gl9_scene/player.cpp
+#        src/gl9_scene/projectile.cpp
+#        src/gl9_scene/explosion.cpp
+#        src/gl9_scene/space.cpp)
+#target_link_libraries(gl9_scene ppgso shaders)
+#install(TARGETS gl9_scene DESTINATION .)
 
 # Playground target
 add_executable(playground src/playground/playground.cpp)
