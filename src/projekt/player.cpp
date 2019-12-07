@@ -73,7 +73,7 @@ bool Player::update(Scene &scene, float dt) {
 //  }
 
 if (acceleration != glm::vec3{0,0,0}) {
-    speed += acceleration * 0.01f;
+    speed += acceleration * 0.001f;
     acceleration = {0,0,0};
 }
     position += speed * dt;

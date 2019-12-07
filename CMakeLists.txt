@@ -81,6 +81,7 @@ add_library(ppgso STATIC
         ppgso/image_raw.cpp
         ppgso/texture.cpp
         ppgso/window.cpp
+        ppgso/util.cpp
         )
 
 # Make sure GLM uses radians and GLEW is a static library
@@ -170,6 +171,7 @@ install(TARGETS projekt DESTINATION .)
 
 ## gl9_scene
 #add_executable(gl9_scene
+#
 #        src/gl9_scene/gl9_scene.cpp
 #        src/gl9_scene/object.cpp
 #        src/gl9_scene/scene.cpp

@@ -38,9 +38,9 @@ void main() {
 
 //  vec3 viewDir = normalize(ViewPosition - fragPos);
 //  vec3 reflectDir = reflect(-lightDir, norm);
-
-  vec3 viewDir = normalize(ViewPosition - fragPos);
-  vec4 reflectDir = reflect(-lightDir, normal);
+//
+//  vec3 viewDir = normalize(ViewPosition - fragPos);
+//  vec4 reflectDir = reflect(-lightDir, normal);
 
 
 
@@ -58,15 +58,15 @@ void main() {
 
 //  vec4 lightDir = vec4(normalize(LightDirection - fragPos),1.0f);
 //  vec4 viewDir = vec4(normalize(ViewPosition - fragPos),1.0f);
-//  vec4 reflectDir = reflect(-lightDir, normal);
-
-  float spec = pow(max(dot(viewDir, reflectDir), 0.0), 128);
-
-
+////  vec4 reflectDir = reflect(-lightDir, normal);
+//
+//  float spec = pow(max(dot(viewDir, reflectDir), 0.0), 128);
+//
+//
 
 //  float finalLightIntensity = max(diffuse,spec);
 
-  float finalLightIntensity = spec;
+  float finalLightIntensity = diff;
 //  float finalLightIntensity = diff/2+spec;
   finalLightIntensity = clamp(finalLightIntensity,0,1);
   // Lookup the color in Texture on coordinates given by texCoord

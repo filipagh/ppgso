@@ -7,8 +7,11 @@
 //#include "explosion.h"
 
 
+
+
 #include <cmake-build-debug/shaders/color_vert_glsl.h>
 #include <cmake-build-debug/shaders/color_frag_glsl.h>
+#include <util.h>
 
 
 // Static resources
@@ -17,12 +20,12 @@ std::unique_ptr<ppgso::Texture> Asteroid::texture;
 std::unique_ptr<ppgso::Shader> Asteroid::shader;
 
 Asteroid::Asteroid() {
-  // Set random scale speed and rotation
-//    this->position = {0.0f,0.0f,0.0f};
+    this->speed = {ppgso::Util::randomFloat(0.01f),ppgso::Util::randomFloat(0.001f),0};
+    this->position = { ppgso::Util::randomInt(350,20),ppgso::Util::randomInt(350,20),0.0f};
 //    this->moveVector = {(float)  (-10 + rand() % 20 +1) / 1000000,(float)  (-10 + rand() % 20 +1) / 1000000,(float)  -( rand() % 20 +1) / 100};
 
 
-//  scale *= glm::linearRand(1.0f, 3.0f);
+  scale *= glm::linearRand(1.0f, 10.0f);
 //  speed = {glm::linearRand(-2.0f, 2.0f), glm::linearRand(-5.0f, -10.0f), 0.0f};
 //  rotation = glm::ballRand(ppgso::PI);
 //  rotMomentum = glm::ballRand(ppgso::PI);
@@ -30,8 +33,8 @@ Asteroid::Asteroid() {
   // Initialize static resources if needed
 //  if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
   if (!shader) shader = std::make_unique<ppgso::Shader>(color_vert_glsl, color_frag_glsl);
-//  if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("asteroid.bmp"));
-  if (!mesh) mesh = std::make_unique<ppgso::Mesh>("cube.obj");
+  if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("asteroid.bmp"));
+  if (!mesh) mesh = std::make_unique<ppgso::Mesh>("sphere.obj");
 }
 
 bool Asteroid::update(Scene &scene, float dt) {
@@ -67,11 +70,19 @@ bool Asteroid::update(Scene &scene, float dt) {
   }
 
 
-/////////////
-    position+=speed;
+    this->position+=speed;
+
+    if (borderDie()) {
+        return false;
+    }
     generateModelMatrix();
     return true;
 }
+
+bool Asteroid::borderDie() {
+    return (abs(static_cast<int>(position.x)) > 400 || abs(static_cast<int>(position.y)) > 400);
+}
+
 //
 //void Asteroid::explode(Scene &scene, glm::vec3 explosionPosition, glm::vec3 explosionScale, int pieces) {
 //  // Generate explosion

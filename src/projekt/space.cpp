@@ -31,7 +31,7 @@ std::unique_ptr<Player> objPlayer;
 
 void Space::init() {
     camera = std::make_unique<Camera>(120.0f, 1.0f, 0.1f, 1000.0f);
-    camera->position = glm::vec3{0.0f, 0.0f, 30.0f};
+    camera->position = glm::vec3{0.0f, 0.0f, 1000.0f};
     camera->back = camera->position;
     camera->up = glm::vec3{0.0f, 1.0f, 0.0f};
     camera = move(camera);
@@ -41,11 +41,35 @@ void Space::init() {
     objPlayer->position = {0, 0, 0};
     objects.push_back(move(objPlayer));
 
-    auto obj = std::make_unique<Asteroid>();
-    obj->acceleration = {0,0,0};
-    obj->position = {10,0,0};
-    obj->speed = {-1,0,0};
+    std::unique_ptr<Wall> obj;
+    obj = std::make_unique<Wall>();
+    obj->scale = {1.0f,800.0f,.01f};
+    obj->position = {400,0,-5.0f};
     objects.push_back(move(obj));
+
+    obj = std::make_unique<Wall>();
+    obj->scale = {1.0f,800.0f,.01f};
+    obj->position = {-400,0,-5.0f};
+    objects.push_back(move(obj));
+
+    obj = std::make_unique<Wall>();
+    obj->scale = {800.0f,1.0f,.01f};
+    obj->position = {0,-400,-5.0f};
+    objects.push_back(move(obj));
+
+    obj = std::make_unique<Wall>();
+    obj->scale = {800.0f,1.0f,.01f};
+    obj->position = {0,400,-5.0f};
+    objects.push_back(move(obj));
+
+    int i = 0;
+    std::unique_ptr<Asteroid> asteroid;
+    for (i=0;i <=100;i++) {
+        asteroid = std::make_unique<Asteroid>();
+        objects.push_back(move(asteroid));
+    }
+
+
 }
 
 void Space::keyEvent(int key, int scanCode, int action, int mods) {
@@ -76,8 +100,8 @@ void Space::render() {
 void Space::update(float time, float dTime) {
     lightDirection = {1, 1, 1};
     Scene::update(time, dTime);
-    camera->position = getPlayer()->position + glm::vec3{0,0,30};
-    camera->back = glm::vec3{0,0,30};
+    camera->position = getPlayer()->position + glm::vec3{0,0,100};
+    camera->back = glm::vec3{0,0,100};
     camera->update(time);
 }
 

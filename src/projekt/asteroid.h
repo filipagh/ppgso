@@ -62,5 +62,6 @@ public:
   void onClick(Scene &scene) override;
 
 private:
+    bool borderDie();
 };
 
