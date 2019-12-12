@@ -51,13 +51,11 @@ class Scene {
       bool left, right;
     } cursor;
 
-    virtual /*!
- * Render all objects in the scene
- */
-
-void update(float time,float dTime);
+    virtual void update(float time,float dTime);
 
     virtual void render();
+
+    virtual void addObject(std::unique_ptr<Object> obj);
 
 };
 

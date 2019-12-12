@@ -13,35 +13,34 @@
 #include <cmake-build-debug/shaders/color_vert_glsl.h>
 #include <cmake-build-debug/shaders/color_frag_glsl.h>
 #include <util.h>
+#include <glm/gtx/euler_angles.hpp>
 
 
 // Static resources
-std::unique_ptr<ppgso::Mesh> Asteroid::mesh;
-std::unique_ptr<ppgso::Texture> Asteroid::texture;
-std::unique_ptr<ppgso::Shader> Asteroid::shader;
+std::unique_ptr<ppgso::Mesh> Missile::mesh;
+std::unique_ptr<ppgso::Texture> Missile::texture;
+std::unique_ptr<ppgso::Shader> Missile::shader;
 
-Asteroid::Asteroid() {
-    this->speed = {ppgso::Util::randomFloat(5.0f),ppgso::Util::randomFloat(5.0f),0};
-    this->position = { ppgso::Util::randomInt(350,20),ppgso::Util::randomInt(350,20),0.0f};
+Missile::Missile(const Player& player) {
 
-    scale *= glm::linearRand(3.0f, 10.0f);
+    this->speed = player.speed;
+    this->acceleration = glm::orientate3(player.rotation) * glm::vec3{0,20,0};
+    // todo pravit rychlost
+    this->position = player.position + glm::orientate3(player.rotation) * glm::vec3{0,10,0};
 
-//  speed = {glm::linearRand(-2.0f, 2.0f), glm::linearRand(-5.0f, -10.0f), 0.0f};
-//  rotation = glm::ballRand(ppgso::PI);
-//  rotMomentum = glm::ballRand(ppgso::PI);
 
-  // Initialize static resources if needed
 //  if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
   if (!shader) shader = std::make_unique<ppgso::Shader>(color_vert_glsl, color_frag_glsl);
   if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("asteroid.bmp"));
   if (!mesh) mesh = std::make_unique<ppgso::Mesh>("sphere.obj");
 }
 
-bool Asteroid::update(Scene &scene, float dt) {
+bool Missile::update(Scene &scene, float dt) {
 
     if (shouldBeDestroyed) {
         return false;
     }
+
     if (borderDie()) {
         return false;
     }
@@ -55,8 +54,7 @@ bool Asteroid::update(Scene &scene, float dt) {
     auto asteroid = dynamic_cast<Asteroid*>(obj.get()); // dynamic_pointer_cast<Asteroid>(obj);
 //    auto projectile = dynamic_cast<Projectile*>(obj.get()); //dynamic_pointer_cast<Projectile>(obj);
     auto player = dynamic_cast<Player*>(obj.get()); //dynamic_pointer_cast<Projectile>(obj);
-    auto missile = dynamic_cast<Missile*>(obj.get()); //dynamic_pointer_cast<Projectile>(obj);
-    if (!asteroid && !player && !missile) continue;
+    if (!asteroid && !player) continue;
 
     // Compare distance to approximate size of the asteroid estimated from scale.
     if (distance(position, obj->position) < (obj->scale.y + scale.y) * 0.7f) {
@@ -65,30 +63,13 @@ bool Asteroid::update(Scene &scene, float dt) {
             Garage *sceneGarage = new Garage();
             ParticleWindow::changeScene(sceneGarage, true);
             return false;
-        } else if (asteroid) {
-//            auto tmp = scale.x > asteroid->scale.x ? speed : asteroid->speed;
-//
-//
-//            auto speed1 = speed * (float) pow(scale.x,1/3) / (float) pow(asteroid->scale.x,1/3);
-//            auto speed2 = asteroid->speed * (float) pow(asteroid->scale.x,1/3) / (float) pow(scale.x,1/3);
-//            asteroid->speed += speed1+speed2;
-
-            asteroid->speed = (speed * scale.x + asteroid->speed * asteroid->scale.x) / (scale.x + asteroid->scale.x) / 2.0f;
-
-            glm::vec3 newScale = scale.x > asteroid->scale.x ? scale : asteroid->scale;
-
-            asteroid->scale = newScale + (float) pow(scale.x,(float)1/3);
-            return false;
-        } else if (missile) {
-            missile->shouldBeDestroyed = true;
-            return false;
         }
-    } else if (asteroid) {
-        float exponent = glm::length(position - asteroid->position);
-        auto a = glm::normalize(position - asteroid->position) * (float) 10 * glm::pow(0.1f,exponent/10);
-        asteroid->acceleration += (glm::normalize(position - asteroid->position) * scale.x )  / glm::pow(exponent,(float) 2);
-//        asteroid->acceleration += glm::normalize(position - asteroid->position) * (float) 10 * (0.1f,exponent/2) ;
-//        asteroid->acceleration += glm::normalize(position - asteroid->position) *  glm::length(position - asteroid->position) *  glm::length(position - asteroid->position) ;
+
+      // The projectile will be destroyed
+      if (asteroid) {
+          asteroid->shouldBeDestroyed = true;
+          return false;
+      }
     }
   }
 
@@ -96,7 +77,7 @@ bool Asteroid::update(Scene &scene, float dt) {
     return true;
 }
 
-bool Asteroid::borderDie() {
+bool Missile::borderDie() {
     return (abs(static_cast<int>(position.x)) > 400 || abs(static_cast<int>(position.y)) > 400);
 }
 
@@ -121,7 +102,7 @@ bool Asteroid::borderDie() {
 //  }
 //}
 
-void Asteroid::render(Scene &scene) {
+void Missile::render(Scene &scene) {
     // TODO: Render the object
     shader->use();
     shader->setUniform("OverallColor", {255,0,0});
@@ -146,7 +127,7 @@ void Asteroid::render(Scene &scene) {
 //  mesh->render();
 }
 
-void Asteroid::onClick(Scene &scene) {
+void Missile::onClick(Scene &scene) {
 //  std::cout << "Asteroid clicked!" << std::endl;
 //  explode(scene, position, {10.0f, 10.0f, 10.0f}, 0 );
 //  age = 10000;

@@ -70,7 +70,7 @@ bool Wall::update(Scene &scene, float dt) {
 //    scene.objects.push_back(move(projectile));
 //  }
 
-  generateModelMatrix();
+  generateModelMatrix(dt);
   return true;
 }
 

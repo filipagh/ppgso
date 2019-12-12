@@ -93,7 +93,7 @@ void Garage::keyEvent(int key, int scanCode, int action, int mods) {
     if (key == GLFW_KEY_SPACE) {
         // TODO: Add renderable object to the scene
         int i = 5;
-        addParticle();
+//        addParticle();
     }
     if (key == GLFW_KEY_G && action == GLFW_PRESS) {
         // TODO: Add renderable object to the scene
@@ -109,13 +109,9 @@ void Garage::update(float time, float dTime) {
     lightDirection = {-2,0,0};
     Scene::update(time, dTime);
 }
-
-void Garage::addParticle() {
-    auto obj = std::make_unique<Asteroid>();
-    obj->scale = {10,1,1};
+void Garage::addObject(std::unique_ptr<Object> obj) {
     objects.push_back(move(obj));
 }
-
 
 
 //bool Player::update(Scene &scene, float dt) {

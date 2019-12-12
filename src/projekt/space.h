@@ -11,13 +11,15 @@
  */
 class Space final : public Scene {
 private:
-
+        bool cameraMapMod = false;
 public:
     /*!
      * Create a new player
      */
-    Space();
+    Space(int asteroidCount = 100);
 
+    int asteroidCount = 0;
+    int playerScore = 0;
     void init() override;
 
     void keyEvent(int key, int scanCode, int action, int mods) override;
@@ -27,6 +29,9 @@ public:
 
     void update(float time, float dTime) override ;
 
-    Object * getPlayer();
+    Player * getPlayer();
+
+
+    void addObject(std::unique_ptr<Object> obj);
 };
 

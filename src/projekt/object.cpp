@@ -7,7 +7,12 @@
 
 #include "object.h"
 
-void Object::generateModelMatrix() {
+void Object::generateModelMatrix(float deltaTime) {
+    if (acceleration != glm::vec3{0,0,0}) {
+        speed += acceleration;
+        acceleration = {0,0,0};
+    }
+    position += speed * deltaTime;
     modelMatrix =
             glm::translate(glm::mat4(1.0f), position)
             * glm::orientate4(rotation)

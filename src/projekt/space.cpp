@@ -10,21 +10,14 @@
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_light_glsl.h>
+#include <util.h>
+#include <glm/gtx/euler_angles.hpp>
 
 //// shared resources
-//std::unique_ptr<ppgso::Mesh> Player::mesh;
-//std::unique_ptr<ppgso::Texture> Player::texture;
-//std::unique_ptr<ppgso::Shader> Player::shader;
 
-Space::Space() {
-
-    // Scale the default model
-//  scale *= 3.0f;
-//
-//  // Initialize static resources if needed
-//  if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_light_glsl);
-//  if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("corsair.bmp"));
-//  if (!mesh) mesh = std::make_unique<ppgso::Mesh>("corsair.obj");
+Space::Space(int asteroidCount) {
+    this->asteroidCount = asteroidCount;
+    this->playerScore = 0;
 }
 
 std::unique_ptr<Player> objPlayer;
@@ -38,7 +31,8 @@ void Space::init() {
 
     objPlayer = std::make_unique<Player>();
     objPlayer->scale = {10,10,10};
-    objPlayer->position = {0, 0, 0};
+    objPlayer->rotation = {0,-90*ppgso::PI/180,0};
+    objPlayer->position = {0, 400, 0};
     objects.push_back(move(objPlayer));
 
     std::unique_ptr<Wall> obj;
@@ -64,14 +58,16 @@ void Space::init() {
 
     int i = 0;
     std::unique_ptr<Asteroid> asteroid;
-    for (i=0;i <=100;i++) {
+    for (i=0;i <=asteroidCount;i++) {
         asteroid = std::make_unique<Asteroid>();
         objects.push_back(move(asteroid));
     }
 
 
 }
-
+void Space::addObject(std::unique_ptr<Object> obj)  {
+    objects.push_back(move(obj));
+}
 void Space::keyEvent(int key, int scanCode, int action, int mods) {
 
 //    if (key == GLFW_KEY_SPACE) {
@@ -82,15 +78,24 @@ void Space::keyEvent(int key, int scanCode, int action, int mods) {
         Garage *garageSpace = new Garage();
         ParticleWindow::changeScene(garageSpace, true);
     } else if (key == GLFW_KEY_W) {
-       getPlayer()->acceleration = getPlayer()->acceleration + glm::vec3{0,1,0};
+        getPlayer()->acceleration = getPlayer()->acceleration + (glm::vec3 {0,3,0});
     } else if (key == GLFW_KEY_A) {
-       getPlayer()->acceleration = getPlayer()->acceleration + glm::vec3{-1,0,0};
+       getPlayer()->acceleration = getPlayer()->acceleration + glm::vec3{-3,0,0};
     } else if (key == GLFW_KEY_S) {
-       getPlayer()->acceleration = getPlayer()->acceleration + glm::vec3{0,-1,0};
+       getPlayer()->acceleration = getPlayer()->acceleration + glm::vec3{0,-3,0};
     } else if (key == GLFW_KEY_D) {
-       getPlayer()->acceleration = getPlayer()->acceleration + glm::vec3{1,0,0};
+       getPlayer()->acceleration = getPlayer()->acceleration + glm::vec3{3,0,0};
+    } else if (key == GLFW_KEY_Q) {
+        getPlayer()->rotationAcceleration = getPlayer()->rotationAcceleration + glm::vec3{0,30*ppgso::PI/180,0};
+    } else if (key == GLFW_KEY_E) {
+        getPlayer()->rotationAcceleration = getPlayer()->rotationAcceleration + glm::vec3{0,-30*ppgso::PI/180,0};
+    } else if (key == GLFW_KEY_T) {
+        getPlayer()->rotationSpeed = {0,0,0};
+    } else if (key == GLFW_KEY_SPACE) {
+        getPlayer()->fireMissile(*this);
+    } else if (key == GLFW_KEY_M && action == GLFW_PRESS) {
+        cameraMapMod = !cameraMapMod;
     }
-
 }
 
 void Space::render() {
@@ -100,87 +105,20 @@ void Space::render() {
 void Space::update(float time, float dTime) {
     lightDirection = {1, 1, 1};
     Scene::update(time, dTime);
-    camera->position = getPlayer()->position + glm::vec3{0,0,100};
-    camera->back = glm::vec3{0,0,100};
+    if (cameraMapMod) {
+        camera->position = glm::vec3{0,0,300};
+        camera->back = glm::vec3{0,0,300};
+    } else {
+        camera->position = getPlayer()->position + glm::vec3{0, 0, 100};
+        camera->back = glm::vec3{0, 0, 100};
+    }
     camera->update(time);
 }
 
-Object * Space::getPlayer() {
+Player * Space::getPlayer() {
+
     auto p = std::begin(objects)->get();
-    return p;
+    auto player = dynamic_cast<Player*>(p);
+    return player;
 }
-//bool Player::update(Scene &scene, float dt) {
-////  // Fire delay increment
-////  fireDelay += dt;
-////
-////  // Hit detection
-////  for ( auto& obj : scene.objects ) {
-////    // Ignore self in scene
-////    if (obj.get() == this)
-////      continue;
-////
-////    // We only need to collide with asteroids, ignore other objects
-////    auto asteroid = dynamic_cast<Asteroid*>(obj.get());
-////    if (!asteroid) continue;
-////
-////    if (distance(position, asteroid->position) < asteroid->scale.y) {
-////      // Explode
-////      auto explosion = std::make_unique<Explosion>();
-////      explosion->position = position;
-////      explosion->scale = scale * 3.0f;
-////      scene.objects.push_back(move(explosion));
-////
-////      // Die
-////      return false;
-////    }
-////  }
-////
-////  // Keyboard controls
-////  if(scene.keyboard[GLFW_KEY_LEFT]) {
-////    position.x += 10 * dt;
-////    rotation.z = -ppgso::PI/4.0f;
-////  } else if(scene.keyboard[GLFW_KEY_RIGHT]) {
-////    position.x -= 10 * dt;
-////    rotation.z = ppgso::PI/4.0f;
-////  } else {
-////    rotation.z = 0;
-////  }
-////
-////  // Firing projectiles
-////  if(scene.keyboard[GLFW_KEY_SPACE] && fireDelay > fireRate) {
-////    // Reset fire delay
-////    fireDelay = 0;
-////    // Invert file offset
-////    fireOffset = -fireOffset;
-////
-////    auto projectile = std::make_unique<Projectile>();
-////    projectile->position = position + glm::vec3(0.0f, 0.0f, 0.3f) + fireOffset;
-////    scene.objects.push_back(move(projectile));
-////  }
-//
-//  generateModelMatrix();
-//  return true;
-//}
-//
-//void Player::render(Scene &scene) {
-//  shader->use();
-//
-//  // Set up light
-//  shader->setUniform("LightDirection", scene.lightDirection);
-//  shader->setUniform("ViewPosition", scene.camera->position);
-//
-//  // use camera
-//  shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
-//  shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
-//
-//
-//  // render mesh
-//
-//  shader->setUniform("ModelMatrix", modelMatrix);
-//  shader->setUniform("Texture", *texture);
-//  mesh->render();
-//}
-//
-//void Player::onClick(Scene &scene) {
-//  std::cout << "Player has been clicked!" << std::endl;
-//}
+

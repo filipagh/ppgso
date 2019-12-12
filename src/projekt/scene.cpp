@@ -9,7 +9,7 @@ void Scene::update(float time,float dTime) {
   while (i != std::end(objects)) {
     // Update and remove from list if needed
     auto obj = i->get();
-    if (!obj->update(*this, time))
+    if (!obj->update(*this, dTime))
       i = objects.erase(i); // NOTE: no need to call destructors as we store shared pointers in the scene
     else
       ++i;
@@ -53,3 +53,8 @@ std::vector<Object*> Scene::intersect(const glm::vec3 &position, const glm::vec3
 
   return intersected;
 }
+
+void Scene::addObject(std::unique_ptr<Object> obj) {
+
+}
+

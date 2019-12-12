@@ -1,5 +1,7 @@
 #include <cstdlib>
 #include <glm/gtc/random.hpp>
+#include <glm/fwd.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "util.h"
 
 
@@ -23,13 +25,18 @@ int ppgso::Util::randomInt(int distance, int from) {
 }
 
 float ppgso::Util::randomFloat(float distance, float from) {
-    float tmp = glm::linearRand(from,distance);
+    float tmp = glm::linearRand(from, distance);
     if (randomBool()) {
         return -tmp;
     }
     return tmp;
-
 }
+
+glm::vec3 ppgso::Util::rotateVec3byAngle(glm::vec3 vector, float angle, glm::vec3 axis) {
+    glm::vec4 tmp = glm::vec4{vector,0.0} * glm::rotate(glm::mat4{1},angle,axis);
+    return glm::vec3 {tmp.x,tmp.y,tmp.z};
+}
+
 
 
 

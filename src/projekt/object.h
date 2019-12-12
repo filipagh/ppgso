@@ -14,8 +14,9 @@ class Scene;
  *  Generally we also want to keep position, rotation and scale for each object to generate a modelMatrix
  */
 class Object {
+private:
 public:
-  // Define default constructors as this is an abstract class
+    // Define default constructors as this is an abstract class
   Object() = default;
   Object(const Object&) = default;
   Object(Object&&) = default;
@@ -50,10 +51,11 @@ public:
   glm::mat4 modelMatrix{1};
   glm::vec3 speed{0,0,0};
   glm::vec3 acceleration{0,0,0};
+  bool shouldBeDestroyed = false;
 protected:
   /*!
    * Generate modelMatrix from position, rotation and scale
    */
-  void generateModelMatrix();
+  void generateModelMatrix(float deltaTime);
 };
 
