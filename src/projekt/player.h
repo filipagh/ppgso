@@ -26,7 +26,7 @@ private:
 public:
     glm::vec3 rotationSpeed = {0,0,0};
     glm::vec3 rotationAcceleration = {0,0,0};
-
+    bool drawOrs= false;
 
     /*!
    * Create a new player

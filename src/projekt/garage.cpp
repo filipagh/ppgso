@@ -97,7 +97,7 @@ void Garage::keyEvent(int key, int scanCode, int action, int mods) {
     }
     if (key == GLFW_KEY_G && action == GLFW_PRESS) {
         // TODO: Add renderable object to the scene
-        Space* sceneSpace = new Space();
+        Space* sceneSpace = new Space(100);
         ParticleWindow::changeScene(sceneSpace, true);
 
     }

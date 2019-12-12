@@ -11,15 +11,15 @@
  */
 class Space final : public Scene {
 private:
-        bool cameraMapMod = false;
+    bool cameraMapMod = false;
 public:
+    static int asteroidCount;
+    static int playerScore;
+
     /*!
      * Create a new player
      */
     Space(int asteroidCount = 100);
-
-    int asteroidCount = 0;
-    int playerScore = 0;
     void init() override;
 
     void keyEvent(int key, int scanCode, int action, int mods) override;

@@ -116,8 +116,9 @@ void Player::render(Scene &scene) {
   shader->setUniform("ModelMatrix", modelMatrix);
   shader->setUniform("Texture", *texture);
   mesh->render();
-
-  asteroid->render(scene);
+    if (drawOrs) {
+        asteroid->render(scene);
+    }
 }
 
 void Player::onClick(Scene &scene) {

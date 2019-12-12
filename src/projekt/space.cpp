@@ -14,10 +14,11 @@
 #include <glm/gtx/euler_angles.hpp>
 
 //// shared resources
-
+int Space::asteroidCount;
+int Space::playerScore;
 Space::Space(int asteroidCount) {
-    this->asteroidCount = asteroidCount;
-    this->playerScore = 0;
+    Space::asteroidCount = asteroidCount;
+    Space::playerScore = 0;
 }
 
 std::unique_ptr<Player> objPlayer;
@@ -32,7 +33,7 @@ void Space::init() {
     objPlayer = std::make_unique<Player>();
     objPlayer->scale = {10,10,10};
     objPlayer->rotation = {0,-90*ppgso::PI/180,0};
-    objPlayer->position = {0, 400, 0};
+//    objPlayer->position = {0, 400, 0};
     objects.push_back(move(objPlayer));
 
     std::unique_ptr<Wall> obj;
@@ -95,6 +96,8 @@ void Space::keyEvent(int key, int scanCode, int action, int mods) {
         getPlayer()->fireMissile(*this);
     } else if (key == GLFW_KEY_M && action == GLFW_PRESS) {
         cameraMapMod = !cameraMapMod;
+    } else if (key == GLFW_KEY_H && action == GLFW_PRESS) {
+      getPlayer()->drawOrs=!getPlayer()->drawOrs;
     }
 }
 
@@ -103,6 +106,12 @@ void Space::render() {
 }
 
 void Space::update(float time, float dTime) {
+    if (!Space::asteroidCount) {
+        Garage *garageSpace = new Garage();
+        ParticleWindow::changeScene(garageSpace, true);
+        return;
+    }
+
     lightDirection = {1, 1, 1};
     Scene::update(time, dTime);
     if (cameraMapMod) {

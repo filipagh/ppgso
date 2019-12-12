@@ -4,6 +4,7 @@
 #include "garage.h"
 #include "game.h"
 #include "missile.h"
+#include "space.h"
 //#include "projectile.h"
 //#include "explosion.h"
 
@@ -40,9 +41,11 @@ Asteroid::Asteroid() {
 bool Asteroid::update(Scene &scene, float dt) {
 
     if (shouldBeDestroyed) {
+        Space::asteroidCount--;
         return false;
     }
     if (borderDie()) {
+        Space::asteroidCount--;
         return false;
     }
 
@@ -78,9 +81,12 @@ bool Asteroid::update(Scene &scene, float dt) {
             glm::vec3 newScale = scale.x > asteroid->scale.x ? scale : asteroid->scale;
 
             asteroid->scale = newScale + (float) pow(scale.x,(float)1/3);
+            Space::asteroidCount--;
             return false;
         } else if (missile) {
             missile->shouldBeDestroyed = true;
+            Space::asteroidCount--;
+            Space::playerScore++;
             return false;
         }
     } else if (asteroid) {
