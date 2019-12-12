@@ -26,13 +26,8 @@ Asteroid::Asteroid() {
     this->position = { ppgso::Util::randomInt(350,20),ppgso::Util::randomInt(350,20),0.0f};
 
     scale *= glm::linearRand(3.0f, 10.0f);
+    color = glm::vec3{0,0,0};
 
-//  speed = {glm::linearRand(-2.0f, 2.0f), glm::linearRand(-5.0f, -10.0f), 0.0f};
-//  rotation = glm::ballRand(ppgso::PI);
-//  rotMomentum = glm::ballRand(ppgso::PI);
-
-  // Initialize static resources if needed
-//  if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
   if (!shader) shader = std::make_unique<ppgso::Shader>(color_vert_glsl, color_frag_glsl);
   if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("asteroid.bmp"));
   if (!mesh) mesh = std::make_unique<ppgso::Mesh>("sphere.obj");
@@ -77,8 +72,9 @@ bool Asteroid::update(Scene &scene, float dt) {
 //            asteroid->speed += speed1+speed2;
 
             asteroid->speed = (speed * scale.x + asteroid->speed * asteroid->scale.x) / (scale.x + asteroid->scale.x) / 2.0f;
-
+            asteroid->color += 0.2f*scale.x;
             glm::vec3 newScale = scale.x > asteroid->scale.x ? scale : asteroid->scale;
+
 
             asteroid->scale = newScale + (float) pow(scale.x,(float)1/3);
             Space::asteroidCount--;
@@ -106,50 +102,15 @@ bool Asteroid::borderDie() {
     return (abs(static_cast<int>(position.x)) > 400 || abs(static_cast<int>(position.y)) > 400);
 }
 
-//
-//void Asteroid::explode(Scene &scene, glm::vec3 explosionPosition, glm::vec3 explosionScale, int pieces) {
-//  // Generate explosion
-//  auto explosion = std::make_unique<Explosion>();
-//  explosion->position = explosionPosition;
-//  explosion->scale = explosionScale;
-//  explosion->speed = speed / 2.0f;
-//  scene.objects.push_back(move(explosion));
-//
-//  // Generate smaller asteroids
-//  for (int i = 0; i < pieces; i++) {
-//    auto asteroid = std::make_unique<Asteroid>();
-//    asteroid->speed = speed + glm::vec3(glm::linearRand(-3.0f, 3.0f), glm::linearRand(0.0f, -5.0f), 0.0f);;
-//    asteroid->position = position;
-//    asteroid->rotMomentum = rotMomentum;
-//    float factor = (float) pieces / 2.0f;
-//    asteroid->scale = scale / factor;
-//    scene.objects.push_back(move(asteroid));
-//  }
-//}
-
 void Asteroid::render(Scene &scene) {
     // TODO: Render the object
     shader->use();
-    shader->setUniform("OverallColor", {255,0,0});
+    shader->setUniform("OverallColor", color);
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
     shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
     mesh->render();
 
-
-//  shader->use();
-//
-//  // Set up light
-//  shader->setUniform("LightDirection", scene.lightDirection);
-//
-//  // use camera
-//  shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
-//  shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
-//
-//  // render mesh
-//  shader->setUniform("ModelMatrix", modelMatrix);
-//  shader->setUniform("Texture", *texture);
-//  mesh->render();
 }
 
 void Asteroid::onClick(Scene &scene) {

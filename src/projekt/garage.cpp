@@ -38,46 +38,10 @@ void Garage::init() {
 
     std::unique_ptr<Wall> obj;
     obj = std::make_unique<Wall>();
-    obj->scale = {10.0f,10.0f,.01f};
-    obj->position = {0,0,-5.0f};
-    objects.push_back(move(obj));
-
-    obj = std::make_unique<Wall>();
-    obj->scale = {10.0f,10.0f,.01f};
-    obj->position = {5,0,0};
-    obj->rotation = {0,0,-90*ppgso::PI/180};
-    objects.push_back(move(obj));
-
-    obj = std::make_unique<Wall>();
-    obj->scale = {10.0f,10.0f,.01f};
-    obj->position = {-5,0,0};
-    obj->rotation = {0,0,-90*ppgso::PI/180};
-    objects.push_back(move(obj));
-
-    obj = std::make_unique<Wall>();
-    obj->scale = {10.0f,10.0f,.01f};
-    obj->position = {0,0,5};
-    obj->rotation = {0,0,0};
-    objects.push_back(move(obj));
-
-    obj = std::make_unique<Wall>();
-    obj->scale = {10.0f,10.0f,.01f};
-    obj->position = {0,-5,0};
+//    obj->scale = {10.0f,10.0f,.01f};
+//    obj->position = {0,0,-5.0f};
     obj->rotation = {90*ppgso::PI/180,0,0};
     objects.push_back(move(obj));
-
-    obj = std::make_unique<Wall>();
-    obj->scale = {10.0f,10.0f,.01f};
-    obj->position = {0,5,0};
-    obj->rotation = {90*ppgso::PI/180,0,0};
-    objects.push_back(move(obj));
-
-    obj = std::make_unique<Wall>();
-    obj->scale = {2.0f,2.0f,2.00f};
-    obj->position = {1,0,-1};
-    obj->rotation = {0,0,-45*ppgso::PI/180};
-    objects.push_back(move(obj));
-
 
     std::unique_ptr<Player> objPlayer;
     objPlayer = std::make_unique<Player>();
@@ -97,8 +61,11 @@ void Garage::keyEvent(int key, int scanCode, int action, int mods) {
     }
     if (key == GLFW_KEY_G && action == GLFW_PRESS) {
         // TODO: Add renderable object to the scene
-        Space* sceneSpace = new Space(100);
-        ParticleWindow::changeScene(sceneSpace, true);
+
+        Player::animator = new Animator((float) glfwGetTime());
+        Player::isAnimatorSet = true;
+//        Space* sceneSpace = new Space(10);
+//        ParticleWindow::changeScene(sceneSpace, true);
 
     }
 

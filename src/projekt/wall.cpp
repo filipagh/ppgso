@@ -17,8 +17,8 @@ Wall::Wall() {
 
   // Initialize static resources if needed
   if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_light_glsl);
-  if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("sphere.bmp"));
-  if (!mesh) mesh = std::make_unique<ppgso::Mesh>("cube.obj");
+  if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("textura.bmp"));
+  if (!mesh) mesh = std::make_unique<ppgso::Mesh>("untitled.obj");
 }
 
 bool Wall::update(Scene &scene, float dt) {

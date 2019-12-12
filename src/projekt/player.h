@@ -4,7 +4,7 @@
 #include "object.h"
 #include "asteroid.h"
 #include "orb.h"
-
+#include "animator.h"
 /*!
  * Simple object representing the player
  * Reads keyboard status and manipulates its own position
@@ -16,8 +16,7 @@ private:
   static std::unique_ptr<ppgso::Mesh> mesh;
   static std::unique_ptr<ppgso::Shader> shader;
   static std::unique_ptr<ppgso::Texture> texture;
-
-  Orb* asteroid;
+    Orb* asteroid;
   // Delay fire and fire rate
   float fireDelay{0.0f};
     float fireRate{0.1f};
@@ -56,5 +55,8 @@ public:
   void onClick(Scene &scene) override ;
 
   void fireMissile(Scene &scene);
+
+    static Animator* animator;
+    static bool isAnimatorSet;
 };
 

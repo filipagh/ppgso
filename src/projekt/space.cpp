@@ -33,7 +33,7 @@ void Space::init() {
     objPlayer = std::make_unique<Player>();
     objPlayer->scale = {10,10,10};
     objPlayer->rotation = {0,-90*ppgso::PI/180,0};
-//    objPlayer->position = {0, 400, 0};
+//    objPlayer->position = {0, 4000, 0};
     objects.push_back(move(objPlayer));
 
     std::unique_ptr<Wall> obj;
@@ -59,7 +59,7 @@ void Space::init() {
 
     int i = 0;
     std::unique_ptr<Asteroid> asteroid;
-    for (i=0;i <=asteroidCount;i++) {
+    for (i=0;i <asteroidCount;i++) {
         asteroid = std::make_unique<Asteroid>();
         objects.push_back(move(asteroid));
     }

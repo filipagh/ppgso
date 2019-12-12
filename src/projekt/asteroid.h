@@ -18,6 +18,8 @@ private:
   static std::unique_ptr<ppgso::Mesh> mesh;
   static std::unique_ptr<ppgso::Shader> shader;
   static std::unique_ptr<ppgso::Texture> texture;
+  glm::vec3 color;
+
   glm::vec3 moveVector{1};
   // Age of the object in seconds
   float age{0.0f};

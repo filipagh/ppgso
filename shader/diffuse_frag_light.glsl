@@ -66,7 +66,7 @@ void main() {
 
 //  float finalLightIntensity = max(diffuse,spec);
 
-  float finalLightIntensity = diff;
+  float finalLightIntensity = diff+ 0.2f;
 //  float finalLightIntensity = diff/2+spec;
   finalLightIntensity = clamp(finalLightIntensity,0,1);
   // Lookup the color in Texture on coordinates given by texCoord
