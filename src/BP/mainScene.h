@@ -22,9 +22,6 @@ private:
     void addParticle();
 
 public:
-  /*!
-   * Create a new player
-   */
   MainScene();
 
   void init() override;

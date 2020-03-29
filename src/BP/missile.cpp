@@ -1,7 +1,7 @@
 #include <glm/gtc/random.hpp>
 #include "asteroid.h"
 #include "player.h"
-#include "garage.h"
+#include "mainScene.h"
 #include "game.h"
 #include "missile.h"
 //#include "projectile.h"

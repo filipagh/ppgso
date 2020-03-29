@@ -1,7 +1,7 @@
 #include "player.h"
 #include "scene.h"
 #include "asteroid.h"
-#include "garage.h"
+#include "mainScene.h"
 #include "wall.h"
 #include "game.h"
 #include "space.h"
@@ -18,13 +18,6 @@
 
 MainScene::MainScene() {
 
-  // Scale the default model
-//  scale *= 3.0f;
-//
-//  // Initialize static resources if needed
-//  if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_light_glsl);
-//  if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("corsair.bmp"));
-//  if (!mesh) mesh = std::make_unique<ppgso::Mesh>("corsair.obj");
 }
 
 void MainScene::init() {
@@ -36,19 +29,30 @@ void MainScene::init() {
 
 
 
+    ///
+
+
     std::unique_ptr<Wall> obj;
     obj = std::make_unique<Wall>();
 //    obj->scale = {10.0f,10.0f,.01f};
 //    obj->position = {0,0,-5.0f};
-    obj->rotation = {90*ppgso::PI/180,0,0};
+//    obj->rotation = {90*ppgso::PI/180,0,0};
     objects.push_back(move(obj));
 
-    std::unique_ptr<Player> objPlayer;
-    objPlayer = std::make_unique<Player>();
-    objPlayer->scale = {10.0f,10.0f,10};
-    objPlayer->position = {0,-4,0};
-    objPlayer->rotation = {90*ppgso::PI/180,0,0};
-    objects.push_back(move(objPlayer));
+    std::unique_ptr<Asteroid> bone;
+    bone = std::make_unique<Asteroid>();
+//    obj->scale = {10.0f,10.0f,.01f};
+//    obj->position = {0,0,-5.0f};
+//    obj->rotation = {90*ppgso::PI/180,0,0};
+    objects.push_back(move(bone));
+
+
+//    std::unique_ptr<Player> objPlayer;
+//    objPlayer = std::make_unique<Player>();
+//    objPlayer->scale = {10.0f,10.0f,10};
+//    objPlayer->position = {0,-4,0};
+//    objPlayer->rotation = {90*ppgso::PI/180,0,0};
+//    objects.push_back(move(objPlayer));
 
 }
 

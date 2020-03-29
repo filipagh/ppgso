@@ -1,7 +1,7 @@
 #include <glm/gtc/random.hpp>
 #include "asteroid.h"
 #include "player.h"
-#include "garage.h"
+#include "mainScene.h"
 #include "game.h"
 #include "missile.h"
 #include "space.h"
@@ -22,8 +22,8 @@ std::unique_ptr<ppgso::Texture> Asteroid::texture;
 std::unique_ptr<ppgso::Shader> Asteroid::shader;
 
 Asteroid::Asteroid() {
-    this->speed = {ppgso::Util::randomFloat(5.0f),ppgso::Util::randomFloat(5.0f),0};
-    this->position = { ppgso::Util::randomInt(350,20),ppgso::Util::randomInt(350,20),0.0f};
+//    this->speed = {ppgso::Util::randomFloat(5.0f),ppgso::Util::randomFloat(5.0f),0};
+//    this->position = { ppgso::Util::randomInt(350,20),ppgso::Util::randomInt(350,20),0.0f};
 
     scale *= glm::linearRand(3.0f, 10.0f);
     color = glm::vec3{0,0,0};

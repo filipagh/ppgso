@@ -1,7 +1,7 @@
 #include "player.h"
 #include "scene.h"
 #include "asteroid.h"
-#include "garage.h"
+#include "mainScene.h"
 #include "wall.h"
 #include "space.h"
 #include "game.h"
