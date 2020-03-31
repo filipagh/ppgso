@@ -1,6 +1,9 @@
 #include "scene.h"
 
 void Scene::update(float time,float dTime) {
+    glClearColor(.5, .5, .5, 0);
+
+
   camera->update(time);
 
   // Use iterator to update all objects so we can remove while iterating

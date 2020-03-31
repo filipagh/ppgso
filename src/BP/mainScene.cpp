@@ -32,12 +32,12 @@ void MainScene::init() {
     ///
 
 
-    std::unique_ptr<Wall> obj;
-    obj = std::make_unique<Wall>();
-//    obj->scale = {10.0f,10.0f,.01f};
-//    obj->position = {0,0,-5.0f};
-//    obj->rotation = {90*ppgso::PI/180,0,0};
-    objects.push_back(move(obj));
+//    std::unique_ptr<Wall> obj;
+//    obj = std::make_unique<Wall>();
+////    obj->scale = {10.0f,10.0f,.01f};
+////    obj->position = {0,0,-5.0f};
+////    obj->rotation = {90*ppgso::PI/180,0,0};
+//    objects.push_back(move(obj));
 
     std::unique_ptr<Asteroid> bone;
     bone = std::make_unique<Asteroid>();
