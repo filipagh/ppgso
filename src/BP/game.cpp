@@ -1,9 +1,9 @@
 #include "camera.h"
 #include "scene.h"
-#include "player.h"
+
 #include "mainScene.h"
 #include "game.h"
-#include "space.h"
+
 
 
 #include <iostream>

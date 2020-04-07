@@ -6,7 +6,8 @@
 Camera::Camera(float fow, float ratio, float near, float far) {
   float fowInRad = (ppgso::PI/180.0f) * fow;
 
-  projectionMatrix = glm::perspective(fowInRad, ratio, near, far);
+//  projectionMatrix = glm::perspective(fowInRad, ratio, near, far);
+  projectionMatrix = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, 0.1f, 10.0f);
 }
 
 void Camera::update(float time) {

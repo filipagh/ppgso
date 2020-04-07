@@ -2,6 +2,7 @@
 #include <memory>
 
 #include <ppgso/ppgso.h>
+#include <src/BP/skeleton/skeleton.h>
 
 #include "scene.h"
 #include "src/projekt/object.h"
@@ -12,37 +13,19 @@
  * It initializes and loads all resources only once
  * It will move down along the Y axis and self delete when reaching below -10
  */
-class Asteroid final : public Object {
+class BoneModel final : public Object {
 private:
-  // Static resources (Shared between instances)
+  Bone *bone;
+
   static std::unique_ptr<ppgso::Mesh> mesh;
   static std::unique_ptr<ppgso::Shader> shader;
   static std::unique_ptr<ppgso::Texture> texture;
-  glm::vec3 color;
+  glm::vec3 color{0,20,0};
 
-  glm::vec3 moveVector{1};
-  // Age of the object in seconds
-  float age{0.0f};
-
-  // Speed and rotational momentum
-//  glm::vec3 speed;
-//  glm::vec3 rotMomentum;
-
-  /*!
-   * Split the asteroid into multiple pieces and spawn an explosion object.
-   *
-   * @param scene - Scene to place pieces and explosion into
-   * @param explosionPosition - Initial position of the explosion
-   * @param explosionScale - Scale of the explosion
-   * @param pieces - Asteroid pieces to generate
-   */
-  void explode(Scene &scene, glm::vec3 explosionPosition, glm::vec3 explosionScale, int pieces);
 
 public:
-  /*!
-   * Create new asteroid
-   */
-  Asteroid();
+
+  BoneModel(Bone &bone);
 
   /*!
    * Update asteroid

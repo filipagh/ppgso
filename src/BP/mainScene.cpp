@@ -1,15 +1,19 @@
-#include "player.h"
+
 #include "scene.h"
-#include "asteroid.h"
+#include "boneModel.h"
 #include "mainScene.h"
-#include "wall.h"
+
 #include "game.h"
-#include "space.h"
+
+#include "skeletonModel.h"
 //#include "projectile.h"
 //#include "explosion.h"
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_light_glsl.h>
+#include <src/BP/skeleton/bone.h>
+#include <src/BP/skeleton/skeleton.h>
+#include <src/projekt/asteroid.h>
 
 //// shared resources
 //std::unique_ptr<ppgso::Mesh> Player::mesh;
@@ -27,10 +31,10 @@ void MainScene::init() {
     camera->up = glm::vec3{0.0f, 1.0f, 0.0f};
     camera = move(camera);
 
-
-
-    ///
-
+    std::unique_ptr<SkeletonModel> obj;
+    obj = std::make_unique<SkeletonModel>(Skeleton::mockSkeleton());
+    objects.push_back(move(obj));
+    int ab = 45;
 
 //    std::unique_ptr<Wall> obj;
 //    obj = std::make_unique<Wall>();
@@ -38,14 +42,18 @@ void MainScene::init() {
 ////    obj->position = {0,0,-5.0f};
 ////    obj->rotation = {90*ppgso::PI/180,0,0};
 //    objects.push_back(move(obj));
+//
+//
+//
+//
+//    std::unique_ptr<Asteroid> bone;
+//    bone = std::make_unique<Asteroid>();
+////    obj->scale = {10.0f,10.0f,.01f};
+////    obj->position = {0,0,-5.0f};
+////    obj->rotation = {90*ppgso::PI/180,0,0};
+//    objects.push_back(move(bone));
 
-    std::unique_ptr<Asteroid> bone;
-    bone = std::make_unique<Asteroid>();
-//    obj->scale = {10.0f,10.0f,.01f};
-//    obj->position = {0,0,-5.0f};
-//    obj->rotation = {90*ppgso::PI/180,0,0};
-    objects.push_back(move(bone));
-
+    int v = 45;
 
 //    std::unique_ptr<Player> objPlayer;
 //    objPlayer = std::make_unique<Player>();
@@ -66,8 +74,8 @@ void MainScene::keyEvent(int key, int scanCode, int action, int mods) {
     if (key == GLFW_KEY_G && action == GLFW_PRESS) {
         // TODO: Add renderable object to the scene
 
-        Player::animator = new Animator((float) glfwGetTime());
-        Player::isAnimatorSet = true;
+//        Player::animator = new Animator((float) glfwGetTime());
+//        Player::isAnimatorSet = true;
 //        Space* sceneSpace = new Space(10);
 //        ParticleWindow::changeScene(sceneSpace, true);
 
