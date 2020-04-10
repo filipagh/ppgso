@@ -10,7 +10,7 @@
  */
 class Bone {
 private:
-    void updateBone();
+    void updateBone(glm::quat parrentRotQuat);
 
 public:
 
@@ -42,6 +42,6 @@ public:
 
     void updateRootBone();
 
-    void generateModelMatrix(glm::vec3 position);
+    glm::quat generateModelMatrix(glm::vec3 position, glm::quat parrentRotationQuat);
 };
 

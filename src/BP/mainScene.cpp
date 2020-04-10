@@ -26,7 +26,7 @@ MainScene::MainScene() {
 
 void MainScene::init() {
     camera = std::make_unique<Camera>(120.0f, 1.0f, 0.1f, 1000.0f);
-    camera->position = glm::vec3{0.0f, 0.0f, 4.0f};
+    camera->position = glm::vec3{0.0f, 0.0f, 5.0f};
     camera->back = camera->position;
     camera->up = glm::vec3{0.0f, 1.0f, 0.0f};
     camera = move(camera);
@@ -34,7 +34,7 @@ void MainScene::init() {
     std::unique_ptr<SkeletonModel> obj;
     obj = std::make_unique<SkeletonModel>(Skeleton::mockSkeleton());
     objects.push_back(move(obj));
-    int ab = 45;
+
 
 //    std::unique_ptr<Wall> obj;
 //    obj = std::make_unique<Wall>();
