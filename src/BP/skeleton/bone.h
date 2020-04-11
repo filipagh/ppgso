@@ -25,6 +25,8 @@ public:
     glm::vec3 boneVector;
 
     glm::vec3 position;
+    glm::quat rotation;
+
     glm::vec3 boneLength;
 
     /**
@@ -42,6 +44,6 @@ public:
 
     void updateRootBone();
 
-    glm::quat generateModelMatrix(glm::vec3 position, glm::quat parrentRotationQuat);
+    void generateModelMatrix(glm::vec3 parentPos, glm::quat parentRotationQuat);
 };
 

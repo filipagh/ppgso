@@ -36,5 +36,7 @@ public:
     void update(float time, float dTime);
 
     void addObject(std::unique_ptr<Object> obj);
+
+    void handleCameraAnglesX();
 };
 

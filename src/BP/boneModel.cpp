@@ -32,8 +32,8 @@ bool BoneModel::borderDie() {
 void BoneModel::render(Scene &scene) {
     // TODO: Render the object
 
-    std::cout << "out" << std::endl;
-    std::cout << to_string(bone->vector) << std::endl;
+//    std::cout << "out" << std::endl;
+//    std::cout << to_string(bone->vector) << std::endl;
     shader->use();
     shader->setUniform("OverallColor", color);
     shader->setUniform("ModelMatrix", bone->vector);

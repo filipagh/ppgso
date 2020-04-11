@@ -23,38 +23,36 @@ void Bone::addChild(Bone &bone) {
 
 void Bone::updateBone(quat parrentRotQuat) {
 
-    glm::quat boneRot = this->generateModelMatrix(parrent->position, parrentRotQuat);
+    this->generateModelMatrix(parrent->position, parrent->rotation);
 
     for (Bone *bone : this->childrenBones) {
-        bone->updateBone(boneRot);
+        bone->updateBone(rotation);
     }
 
 }
 
 void Bone::updateRootBone() {
-    glm::quat rotQuat = glm::quat(glm::vec3(glm::radians(0.0f),glm::radians(0.0f),glm::radians(45.0f)));
+    glm::quat rotQuat = glm::quat(glm::vec3(glm::radians(0.0f),glm::radians(0.0f),glm::radians(0.0f)));
 
 
-    glm::quat rootQuat = this->generateModelMatrix({0, 0, 0}, rotQuat);
+    this->generateModelMatrix({0, 0, 0}, rotQuat);
     for (Bone *bone : this->childrenBones) {
-        bone->updateBone(rootQuat);
+        bone->updateBone(this->rotation);
     }
 }
 
-glm::quat Bone::generateModelMatrix(glm::vec3 position, quat parrentRotationQuat) {
+void Bone::generateModelMatrix(glm::vec3 parentPos, quat parentRotationQuat) {
     glm::quat quat = Utils::RotationBetweenVectors({0,1,0},{boneLength});
 
-    glm::quat finalQuat = quat * parrentRotationQuat;
+    glm::quat finalQuat = quat * parentRotationQuat;
     glm::mat4 rotMat = glm::toMat4(finalQuat);
     this->vector =
-             glm::translate(glm::mat4{1}, position)
+             glm::translate(glm::mat4{1}, parentPos)
              * rotMat
              * glm::scale(glm::mat4(1.0f), glm::vec3{1,glm::length(boneLength),1});
 
-    this->position = position + (parrentRotationQuat * boneLength);
-
-    return finalQuat;
-
+    this->position = parentPos + (parentRotationQuat * boneLength);
+    this->rotation = finalQuat;
 }
 
 

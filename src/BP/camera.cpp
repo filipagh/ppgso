@@ -7,7 +7,7 @@ Camera::Camera(float fow, float ratio, float near, float far) {
   float fowInRad = (ppgso::PI/180.0f) * fow;
 
 //  projectionMatrix = glm::perspective(fowInRad, ratio, near, far);
-  projectionMatrix = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, 0.1f, 100.0f);
+  projectionMatrix = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, -0.1f, std::numeric_limits<float>::max());
 }
 
 void Camera::update(float time) {
@@ -15,7 +15,7 @@ void Camera::update(float time) {
 
 //  viewMatrix = lookAt(position, position-back, up);
 //  double angle = 90 * fmodf(time,4.0f);
-        time/=10;
+//        time/=10;
 //    position = {5*sin(time),0,5*cos(time)};
 
 //  viewMatrix = glm::mat4{1};

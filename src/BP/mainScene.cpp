@@ -1,19 +1,17 @@
 
 #include "scene.h"
-#include "boneModel.h"
 #include "mainScene.h"
 
-#include "game.h"
+
 
 #include "skeletonModel.h"
-//#include "projectile.h"
-//#include "explosion.h"
+
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_light_glsl.h>
 #include <src/BP/skeleton/bone.h>
 #include <src/BP/skeleton/skeleton.h>
-#include <src/projekt/asteroid.h>
+
 
 //// shared resources
 //std::unique_ptr<ppgso::Mesh> Player::mesh;
@@ -25,8 +23,8 @@ MainScene::MainScene() {
 }
 
 void MainScene::init() {
-    camera = std::make_unique<Camera>(120.0f, 1.0f, 0.1f, 1000.0f);
-    camera->position = glm::vec3{0.0f, 0.0f, 5.0f};
+    camera = std::make_unique<Camera>(120.0f, 1.0f, 0.1f, 100000.0f);
+    camera->position = camera->positionBase;
     camera->back = camera->position;
     camera->up = glm::vec3{0.0f, 1.0f, 0.0f};
     camera = move(camera);
@@ -53,7 +51,7 @@ void MainScene::init() {
 ////    obj->rotation = {90*ppgso::PI/180,0,0};
 //    objects.push_back(move(bone));
 
-    int v = 45;
+
 
 //    std::unique_ptr<Player> objPlayer;
 //    objPlayer = std::make_unique<Player>();
@@ -80,8 +78,36 @@ void MainScene::keyEvent(int key, int scanCode, int action, int mods) {
 //        ParticleWindow::changeScene(sceneSpace, true);
 
     }
+    if (key == GLFW_KEY_RIGHT ) {
+        camera->angleX-=10;
+        handleCameraAnglesX();
+
+    }
+    if (key == GLFW_KEY_LEFT ) {
+        camera->angleX+=10;
+        handleCameraAnglesX();
+    }
+    if (key == GLFW_KEY_UP ) {
+        camera->angleY-=10;
+        handleCameraAnglesX();
+    }
+    if (key == GLFW_KEY_DOWN ) {
+        camera->angleY+=10;
+        handleCameraAnglesX();
+    }
 
 
+}
+
+void MainScene::handleCameraAnglesX() {
+    int m_radius = 50;
+    float x = m_radius * glm::sin(glm::radians((float) camera->angleY)) * glm::sin(glm::radians((float) camera->angleX));
+    float y = m_radius * glm::cos(glm::radians((float) camera->angleY));
+    float z = m_radius * glm::sin(glm::radians((float) camera->angleY)) * cosf(glm::radians((float) camera->angleX));
+
+    camera->position = {x,y,z};
+
+    camera->back = camera->position;
 }
 
 void MainScene::update(float time, float dTime) {
