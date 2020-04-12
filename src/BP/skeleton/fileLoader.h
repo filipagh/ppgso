@@ -15,6 +15,7 @@ private:
 public:
 
     std::list<Bone*> childrenBones;
+    int parentId;
     Bone *parrent = nullptr;
     int id{};
     std::string name = "";
@@ -33,13 +34,13 @@ public:
      *
      * @param boneLength
      */
-    Bone(glm::vec3 boneLength);
+    Bone(int id, int parentId, std::string name, glm::vec3 boneLength);
 
     /**
      *
      * @param bone
      */
-    void addChild(Bone &bone);
+    void addChild(Bone *bone);
 
 
     void updateRootBone();

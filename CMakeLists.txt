@@ -170,7 +170,7 @@ add_executable(projekt  ${SRCFILES} )
 target_link_libraries(projekt ppgso shaders)
 install(TARGETS projekt DESTINATION .)
 
-FILE(GLOB SRCFILES src/BP/*.cpp src/BP/skeleton/*.cpp)
+FILE(GLOB SRCFILES src/BP/*.cpp src/BP/skeleton/*.cpp src/BP/fileLoaders/*.cpp)
 # projekt
 add_executable(BP  ${SRCFILES} )
 target_link_libraries(BP ppgso shaders)

@@ -1,6 +1,6 @@
 
 #include "src/BP/scene.h"
-#include "src/BP/skeleton/bone.h"
+#include "src/BP/skeleton/fileLoader.h"
 
 
 #include <shaders/diffuse_vert_glsl.h>
@@ -12,13 +12,16 @@
 #include <algorithm>
 #include <src/BP/utils.h>
 
-Bone::Bone(glm::vec3 boneLength) {
+Bone::Bone(int id, int parentId, std::string name, glm::vec3 boneLength) {
+    this->id = id;
+    this->name = name;
+    this->parentId = parentId;
     this->boneLength = boneLength;
 }
 
-void Bone::addChild(Bone &bone) {
-    this->childrenBones.push_back(&bone);
-    bone.parrent = this;
+void Bone::addChild(Bone *bone) {
+    this->childrenBones.push_back(bone);
+    bone->parrent = this;
 }
 
 void Bone::updateBone(quat parrentRotQuat) {
@@ -35,6 +38,7 @@ void Bone::updateRootBone() {
     glm::quat rotQuat = glm::quat(glm::vec3(glm::radians(0.0f),glm::radians(0.0f),glm::radians(0.0f)));
 
 
+
     this->generateModelMatrix({0, 0, 0}, rotQuat);
     for (Bone *bone : this->childrenBones) {
         bone->updateBone(this->rotation);
@@ -45,6 +49,8 @@ void Bone::generateModelMatrix(glm::vec3 parentPos, quat parentRotationQuat) {
     glm::quat quat = Utils::RotationBetweenVectors({0,1,0},{boneLength});
 
     glm::quat finalQuat = quat * parentRotationQuat;
+
+
     glm::mat4 rotMat = glm::toMat4(finalQuat);
     this->vector =
              glm::translate(glm::mat4{1}, parentPos)
@@ -52,7 +58,7 @@ void Bone::generateModelMatrix(glm::vec3 parentPos, quat parentRotationQuat) {
              * glm::scale(glm::mat4(1.0f), glm::vec3{1,glm::length(boneLength),1});
 
     this->position = parentPos + (parentRotationQuat * boneLength);
-    this->rotation = finalQuat;
+    this->rotation = parentRotationQuat;
 }
 
 

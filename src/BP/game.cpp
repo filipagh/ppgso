@@ -19,6 +19,8 @@
 #include <ppgso/ppgso.h>
 #include <shaders/color_vert_glsl.h>
 #include <shaders/color_frag_glsl.h>
+#include <src/BP/fileLoaders/fileLoader.h>
+
 const unsigned int SIZE = 1028;
 
 Scene* ParticleWindow::activScene = nullptr;
@@ -74,7 +76,7 @@ Scene* ParticleWindow::rendersScene = nullptr;
 
 int main() {
     // Create new window
-    auto window = ParticleWindow{"task7_particles", SIZE, SIZE};
+    auto window = ParticleWindow{"BP", SIZE, SIZE};
     MainScene sceneGarage = {};
     ParticleWindow::changeScene(&sceneGarage, true);
 //    window.changeScene(&sceneGarage, true);

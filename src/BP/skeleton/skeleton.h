@@ -1,6 +1,6 @@
 #pragma once
 #include <ppgso/ppgso.h>
-#include "bone.h"
+#include "fileLoader.h"
 
 
 /*!
@@ -12,12 +12,15 @@ class Skeleton {
 private:
 public:
 
-    Skeleton(Bone &rootBone1);
+    Skeleton();
 
     static Skeleton* mockSkeleton();
 
     void updateSkeleton();
 
+    void addBone(Bone *bone);
+
+    std::map<int, Bone*> boneMap;
 
     Bone* rootBone;
     std::string name = "";
