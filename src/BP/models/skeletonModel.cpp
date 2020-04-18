@@ -1,7 +1,7 @@
 #include <glm/gtc/random.hpp>
-#include "boneModel.h"
+#include "src/BP/models/boneModel.h"
 
-#include "mainScene.h"
+#include "src/BP/mainScene.h"
 
 #include "skeletonModel.h"
 //#include "projectile.h"

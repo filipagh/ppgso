@@ -74,6 +74,7 @@ add_resources(shaders ${PPGSO_SHADER_SRC})
 # PPGSO library
 add_library(ppgso STATIC
         ppgso/mesh.cpp
+        ppgso/meshSkeleton.cpp
         ppgso/tiny_obj_loader.cpp
         ppgso/shader.cpp
         ppgso/image.cpp
@@ -170,7 +171,7 @@ add_executable(projekt  ${SRCFILES} )
 target_link_libraries(projekt ppgso shaders)
 install(TARGETS projekt DESTINATION .)
 
-FILE(GLOB SRCFILES src/BP/*.cpp src/BP/skeleton/*.cpp src/BP/fileLoaders/*.cpp)
+FILE(GLOB SRCFILES src/BP/*.cpp src/BP/skeleton/*.cpp src/BP/fileLoaders/*.cpp src/BP/models/*.cpp)
 # projekt
 add_executable(BP  ${SRCFILES} )
 target_link_libraries(BP ppgso shaders)

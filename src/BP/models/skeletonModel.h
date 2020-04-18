@@ -4,8 +4,9 @@
 #include <ppgso/ppgso.h>
 #include <src/BP/skeleton/skeleton.h>
 
-#include "scene.h"
+#include "src/BP/scene.h"
 #include "src/projekt/object.h"
+#include "src/BP/models/boneModel.h"
 
 /*!
  * Simple asteroid object
@@ -13,19 +14,15 @@
  * It initializes and loads all resources only once
  * It will move down along the Y axis and self delete when reaching below -10
  */
-class BoneModel final : public Object {
+class SkeletonModel: public Object {
 private:
-  Bone *bone;
-
-  static std::unique_ptr<ppgso::Mesh> mesh;
-  static std::unique_ptr<ppgso::Shader> shader;
-  static std::unique_ptr<ppgso::Texture> texture;
-  glm::vec3 color{0,20,0};
+  Skeleton *skeleton;
+  std::list<BoneModel> boneModels;
 
 
 public:
 
-  BoneModel(Bone &bone);
+    SkeletonModel(Skeleton *skeleton);
 
   /*!
    * Update asteroid
@@ -47,6 +44,8 @@ public:
   void onClick(Scene &scene) override;
 
 private:
-    bool borderDie();
+    void renderSkeleton();
+
+    void renderBone(Bone &bone);
 };
 

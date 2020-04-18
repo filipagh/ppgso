@@ -4,7 +4,7 @@
 
 
 
-#include "skeletonModel.h"
+#include "src/BP/models/skeletonModel.h"
 
 
 #include <shaders/diffuse_vert_glsl.h>
@@ -33,7 +33,7 @@ void MainScene::init() {
 
 
     std::unique_ptr<SkeletonModel> obj;
-    obj = std::make_unique<SkeletonModel>(FileLoader::loadSkeletonFromFile("humanSkel"));
+    obj = std::make_unique<SkeletonModel>(FileLoader::loadSkeletonFromFile("tmp"));
     objects.push_back(move(obj));
 
 

@@ -6,7 +6,7 @@
 
 #include "scene.h"
 #include "src/projekt/object.h"
-#include "boneModel.h"
+#include "src/BP/models/boneModel.h"
 
 using namespace glm;
 
