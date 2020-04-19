@@ -7,6 +7,10 @@
 #include <ppgso/ppgso.h>
 
 #include <shaders/diffuse_vert_glsl.h>
+#include <shaders/texture_frag_glsl.h>
+#include <shaders/texture_vert_glsl.h>
+#include <shaders/skeleton_texture_vert_glsl.h>
+#include <shaders/skeleton_texture_frag_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
 
 const unsigned int SIZE = 512;
@@ -16,9 +20,11 @@ const unsigned int SIZE = 512;
  */
 class DiffuseWindow : public ppgso::Window {
 private:
-  ppgso::Shader program = {diffuse_vert_glsl, diffuse_frag_glsl};
-  ppgso::Texture texture = {ppgso::image::loadBMP("missile.bmp")};
-  ppgso::Mesh object = {"missile.obj"};
+//  ppgso::Shader program = {texture_vert_glsl,texture_frag_glsl};
+  ppgso::Shader program = {skeleton_texture_vert_glsl, skeleton_texture_frag_glsl};
+//  ppgso::Shader program = {diffuse_vert_glsl, diffuse_frag_glsl};
+  ppgso::Texture texture = {ppgso::image::loadBMP("postavicka.bmp")};
+  ppgso::Mesh object = {"postavicka.obj"};
 
 public:
   /*!
@@ -26,11 +32,11 @@ public:
    */
   DiffuseWindow() : Window{"gl7_diffuse", SIZE, SIZE} {
     // Set camera position/rotation - for example, translate camera a bit backwards (positive value in Z axis), so we can see the objects
-    auto cameraMat = translate(glm::mat4{1.0f}, {0.0f, 0.0f, -1.0f});
+    auto cameraMat = translate(glm::mat4{1.0f}, {0.0f, -5.0f, -10.0f});
     program.setUniform("ViewMatrix", cameraMat);
 
     // Set camera position with perspective projection
-    program.setUniform("ProjectionMatrix", glm::perspective((ppgso::PI / 180.f) * 60.0f, 1.0f, 0.1f, 10.0f));
+    program.setUniform("ProjectionMatrix", glm::perspective((ppgso::PI / 180.f) * 60.0f, 1.0f, 0.1f, 100.0f));
 
     // Set the light direction, assumes simple white directional light
     program.setUniform("LightDirection", normalize(glm::vec3{1.0f, -1.0f, 1.0f}));
@@ -81,6 +87,11 @@ public:
 
     // Set the matrix as model matrix for current program
     program.setUniform("ModelMatrix", sphereMat);
+
+    std::vector<glm::mat4> aaa;
+    aaa.push_back(glm::mat4(1));
+    program.setUniform("SkeletonModelMatrix", aaa);
+//    program.setUniform("ModelMatrix", glm::mat4(1));
 
     // Render object
     object.render();

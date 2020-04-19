@@ -36,6 +36,7 @@ void Skeleton::updateSkeleton() {
 }
 
 void Skeleton::addBone(Bone *bone) {
+    boneCount++;
     boneMap[bone->id] = bone;
     if (bone->parentId != 0) {
         Bone* parent = boneMap[bone->parentId];
@@ -43,6 +44,15 @@ void Skeleton::addBone(Bone *bone) {
     } else {
         rootBone = bone;
     }
+}
+
+std::vector<glm::mat4> Skeleton::getSkeletonProjectionMatrix() {
+    std::vector<glm::mat4> vector;
+    for (int i = 1; i<= boneCount; i++) {
+        vector.push_back(glm::mat4(1));
+//        vector.push_back(boneMap[i]->vector);
+    }
+    return vector;
 }
 
 

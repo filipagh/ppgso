@@ -1,6 +1,6 @@
 
-#include "scene.h"
-#include "mainScene.h"
+#include <src/BP/scene.h>
+#include <src/BP/mainScene.h>
 
 
 
@@ -12,6 +12,7 @@
 #include <src/BP/skeleton/fileLoader.h>
 #include <src/BP/skeleton/skeleton.h>
 #include <src/BP/fileLoaders/fileLoader.h>
+#include <src/BP/models/skinSkeletonModel.h>
 
 
 //// shared resources
@@ -32,8 +33,13 @@ void MainScene::init() {
 
 
 
-    std::unique_ptr<SkeletonModel> obj;
-    obj = std::make_unique<SkeletonModel>(FileLoader::loadSkeletonFromFile("tmp"));
+//    std::unique_ptr<SkeletonModel> obj;
+//    obj = std::make_unique<SkeletonModel>(FileLoader::loadSkeletonFromFile("postavicka.sk"));
+//    objects.push_back(move(obj));
+//
+    std::unique_ptr<SkinSkeletonModel> obj;
+    obj = std::make_unique<SkinSkeletonModel>("postavicka.obj", "postavicka.br", "postavicka.bmp", "postavicka.sk");
+//    obj = std::make_unique<SkinSkeletonModel>("test.obj", "test.br", "postavicka.bmp", "test.sk");
     objects.push_back(move(obj));
 
 
@@ -103,7 +109,7 @@ void MainScene::keyEvent(int key, int scanCode, int action, int mods) {
 }
 
 void MainScene::handleCameraAnglesX() {
-    int m_radius = 500;
+    int m_radius = 50;
     float x = m_radius * glm::sin(glm::radians((float) camera->angleY)) * glm::sin(glm::radians((float) camera->angleX));
     float y = m_radius * glm::cos(glm::radians((float) camera->angleY));
     float z = m_radius * glm::sin(glm::radians((float) camera->angleY)) * cosf(glm::radians((float) camera->angleX));

@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include "texture.h"
+#include <list>
 
 namespace ppgso {
 
@@ -100,6 +101,7 @@ namespace ppgso {
      */
     void setUniform(const std::string &name, glm::mat4 matrix) const;
 
+
     /*!
      * Set matrix as an input for the shader program variable "name"
      *
@@ -108,7 +110,10 @@ namespace ppgso {
      */
     void setUniform(const std::string &name, glm::mat3 matrix) const;
 
-  private:
+    void setUniform(const std::string &name, std::vector<glm::mat4> listMatrix) const;
+
+    private:
+
     GLuint program;
   };
 

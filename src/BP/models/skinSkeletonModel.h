@@ -25,7 +25,8 @@ private:
 
 
 public:
-    SkinSkeletonModel();
+    SkinSkeletonModel(const std::string &obj_file, const std::string &br_file, const std::string &bmp_file,
+                      const std::string &sk_file);
 
   /*!
    * Update asteroid
@@ -47,6 +48,7 @@ public:
   void onClick(Scene &scene) override;
 
 private:
-    bool borderDie();
+
+    Skeleton *skeleton;
 };
 

@@ -25,7 +25,7 @@ private:
 
   ppgso::Mesh sphere = {"sphere.obj"};
   ppgso::Mesh cursor = {"quad.obj"};
-  ppgso::Mesh cube = {"cube.obj"};
+  ppgso::Mesh cube = {"postavicka.obj"};
 
   bool animationEnabled = true;
   double cursorX = 0.0;
@@ -87,12 +87,12 @@ public:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Create object matrices
-    auto cubeMat = rotate(glm::mat4{1.0f}, time, {0.5f, 1.0f, 0.0f});
+    auto cubeMat = glm::mat4(1);
     auto sphereMat = translate(glm::mat4{1.0f}, {sin(time), cos(time), 0});
     sphereMat = scale(sphereMat, {0.5f, 0.5f, 0.5f});
 
     // Camera position/rotation - for example, translate camera a bit backwards (positive value in Z axis), so we can see the objects
-    auto cameraMat = translate(glm::mat4{1.0f}, {0.0f, 0.0f, -2.5f});
+    auto cameraMat = translate(glm::mat4{1.0f}, {0.0f, -2.0f, -5.5f});
     program.setUniform("ViewMatrix", cameraMat);
 
     // Update camera position with perspective projection
@@ -110,7 +110,7 @@ public:
     sphere.render();
 
     // Draw cursor using orthographic/parallel projection
-    program.setUniform("ProjectionMatrix", glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 1000.0f, -1000.0f));
+    program.setUniform("ProjectionMatrix", glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 10000000000.0f, -10000000000000.0f));
 
     // Create object matrix
     auto cursorMat =  translate(glm::mat4{1.0f}, {cursorX, cursorY, 0.0f}) * scale(glm::mat4{1.0f}, {0.1f, 0.1f, 0.1f});

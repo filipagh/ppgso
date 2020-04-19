@@ -8,6 +8,8 @@
 #include "texture.h"
 #include "shader.h"
 
+#include <list>
+
 
 ppgso::Shader::Shader(const std::string &vertex_shader_code, const std::string &fragment_shader_code) {
   // Create shaders
@@ -140,4 +142,10 @@ void ppgso::Shader::setUniform(const std::string &name, glm::vec4 vector) const 
   use();
   auto uniform = getUniformLocation(name.c_str());
   glUniform4fv(uniform, 1, value_ptr(vector));
+}
+
+void ppgso::Shader::setUniform(const std::string &name, std::vector<glm::mat4> listMatrix) const {
+    use();
+    auto uniform = getUniformLocation(name.c_str());
+    glUniformMatrix4fv(uniform, listMatrix.size(), GL_FALSE, (float*)&listMatrix[0]);
 }

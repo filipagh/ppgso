@@ -25,5 +25,8 @@ public:
     Bone* rootBone;
     std::string name = "";
 
+    std::vector<glm::mat4> getSkeletonProjectionMatrix();
+
+    int boneCount = 0;
 };
 

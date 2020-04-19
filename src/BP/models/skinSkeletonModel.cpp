@@ -11,10 +11,11 @@
 
 
 
-#include <cmake-build-debug/shaders/color_vert_glsl.h>
-#include <cmake-build-debug/shaders/color_frag_glsl.h>
+#include <cmake-build-debug/shaders/skeleton_texture_frag_glsl.h>
+#include <cmake-build-debug/shaders/skeleton_texture_vert_glsl.h>
 #include <util.h>
 #include <glm/gtx/string_cast.hpp>
+#include <src/BP/fileLoaders/fileLoader.h>
 
 
 // Static resources
@@ -23,11 +24,8 @@ std::unique_ptr<ppgso::Texture> SkinSkeletonModel::texture;
 std::unique_ptr<ppgso::Shader> SkinSkeletonModel::shader;
 
 bool SkinSkeletonModel::update(Scene &scene, float dt) {
+    skeleton->updateSkeleton();
     return true;
-}
-
-bool SkinSkeletonModel::borderDie() {
-    return (abs(static_cast<int>(position.x)) > 400 || abs(static_cast<int>(position.y)) > 400);
 }
 
 void SkinSkeletonModel::render(Scene &scene) {
@@ -37,7 +35,8 @@ void SkinSkeletonModel::render(Scene &scene) {
 //    std::cout << to_string(bone->vector) << std::endl;
     shader->use();
     shader->setUniform("OverallColor", color);
-//    shader->setUniform("ModelMatrix", bone->vector);
+
+    shader->setUniform("SkeletonModelMatrix", skeleton->getSkeletonProjectionMatrix());
     shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
     shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
     mesh->render();
@@ -46,10 +45,13 @@ void SkinSkeletonModel::render(Scene &scene) {
 void SkinSkeletonModel::onClick(Scene &scene) {
 }
 
-SkinSkeletonModel::SkinSkeletonModel() {
+SkinSkeletonModel::SkinSkeletonModel(const std::string &obj_file, const std::string &br_file,
+                                     const std::string &bmp_file,
+                                     const std::string &sk_file) {
     color = glm::vec3{0,2,0};
-    if (!shader) shader = std::make_unique<ppgso::Shader>(color_vert_glsl, color_frag_glsl);
-    if (!mesh) mesh = std::make_unique<ppgso::MeshSkeleton>("cube.obj");
-//    this->bone = &bone;
+    if (!shader) shader = std::make_unique<ppgso::Shader>(skeleton_texture_vert_glsl, skeleton_texture_frag_glsl);
+    if (!mesh) mesh = std::make_unique<ppgso::MeshSkeleton>(obj_file, br_file);
+    if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP(bmp_file));
+    skeleton = FileLoader::loadSkeletonFromFile(sk_file);
 }
 

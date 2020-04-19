@@ -15,5 +15,11 @@ private:
 
 public:
     static Skeleton* loadSkeletonFromFile(std::string file);
+
+    static void loadBoneRigFromFile(std::string file,  std::vector<int> &boneIds, std::vector<float > &boneWeights);
+
+    static void loadBoneVertexFromLine(std::ifstream *pIfstream, std::vector<int> *pVector);
+
+    static void loadVertexBoneWeightFromLine(std::ifstream *pIfstream, std::vector<float> *pVector);
 };
 

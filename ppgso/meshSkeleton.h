@@ -37,7 +37,7 @@ namespace ppgso {
      *
      * @param obj - File path to the obj file to load.
      */
-    MeshSkeleton(const std::string &obj);
+    MeshSkeleton(const std::string &obj_file, const std::string &br_file);
 
     ~MeshSkeleton();
 

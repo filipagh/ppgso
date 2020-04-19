@@ -64,7 +64,7 @@ bool Asteroid::update(Scene &scene, float dt) {
             ParticleWindow::changeScene(sceneGarage, true);
             return false;
         } else if (asteroid) {
-//            auto tmp = scale.x > asteroid->scale.x ? speed : asteroid->speed;
+//            auto postavicka.sk = scale.x > asteroid->scale.x ? speed : asteroid->speed;
 //
 //
 //            auto speed1 = speed * (float) pow(scale.x,1/3) / (float) pow(asteroid->scale.x,1/3);

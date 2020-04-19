@@ -49,6 +49,7 @@ void Bone::generateModelMatrix(glm::vec3 parentPos, quat parentRotationQuat) {
     glm::quat quat = Utils::RotationBetweenVectors({0,1,0},{boneLength});
 
     glm::quat finalQuat = quat * parentRotationQuat;
+//    glm::quat finalQuat = parentRotationQuat;
 
 
     glm::mat4 rotMat = glm::toMat4(finalQuat);

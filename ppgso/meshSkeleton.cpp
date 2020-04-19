@@ -1,10 +1,11 @@
 #include <glm/glm.hpp>
 #include <sstream>
+#include <src/BP/fileLoaders/fileLoader.h>
 
 #include "mesh.h"
 #include "meshSkeleton.h"
 
-ppgso::MeshSkeleton::MeshSkeleton(const std::string &obj_file) {
+ppgso::MeshSkeleton::MeshSkeleton(const std::string &obj_file, const std::string &br_file) {
   // Load OBJ file
   shapes.clear();
   materials.clear();
@@ -57,41 +58,69 @@ ppgso::MeshSkeleton::MeshSkeleton(const std::string &obj_file) {
       glEnableVertexAttribArray(2);
       glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     }
+      std::vector<int> boneIds;
+      std::vector<float> boneWeight;
+
+      FileLoader::loadBoneRigFromFile(br_file,boneIds,boneWeight);
 
       if (!shape.mesh.normals.empty()) {
-          std::vector<int> mojvec;
-          for (int i = 0; i < shape.mesh.positions.size() / 3; i++) {
-              mojvec.push_back(i);
-              mojvec.push_back(i + 1);
-              mojvec.push_back(i + 2);
-          }
+
           // Generate and upload a buffer with texture coordinates to GPU
           glGenBuffers(1, &buffer.boneIds);
           glBindBuffer(GL_ARRAY_BUFFER, buffer.boneIds);
-          glBufferData(GL_ARRAY_BUFFER, shape.mesh.positions.size() * sizeof(int), mojvec.data(),
+          glBufferData(GL_ARRAY_BUFFER, shape.mesh.positions.size() * sizeof(int), boneIds.data(),
                        GL_STATIC_DRAW);
 
           glEnableVertexAttribArray(3);
-          glVertexAttribPointer(3, 3, GL_INT, GL_FALSE, 0, nullptr);
+          glVertexAttribIPointer(3, 3, GL_INT, 0, nullptr);
       }
 
-      // todo bbone weight
+
       if(!shape.mesh.normals.empty()) {
-          std::vector<float> mojvec;
-          for (int i=0; i<shape.mesh.positions.size()/3;i++){
-              mojvec.push_back(i);
-              mojvec.push_back(i+1);
-              mojvec.push_back(i+2);
-          }
           // Generate and upload a buffer with texture coordinates to GPU
           glGenBuffers(1, &buffer.boneWeight);
           glBindBuffer(GL_ARRAY_BUFFER, buffer.boneWeight);
-          glBufferData(GL_ARRAY_BUFFER, shape.mesh.positions.size() * sizeof(float), mojvec.data(),
+          glBufferData(GL_ARRAY_BUFFER, shape.mesh.positions.size() * sizeof(float), boneWeight.data(),
                        GL_STATIC_DRAW);
 
           glEnableVertexAttribArray(4);
           glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
       }
+
+//      if (!shape.mesh.normals.empty()) {
+//          std::vector<int> mojvec;
+//          for (int i = 0; i < shape.mesh.positions.size() / 3; i++) {
+//              mojvec.push_back(i);
+//              mojvec.push_back(i + 1);
+//              mojvec.push_back(i + 2);
+//          }
+//          // Generate and upload a buffer with texture coordinates to GPU
+//          glGenBuffers(1, &buffer.boneIds);
+//          glBindBuffer(GL_ARRAY_BUFFER, buffer.boneIds);
+//          glBufferData(GL_ARRAY_BUFFER, shape.mesh.positions.size() * sizeof(int), mojvec.data(),
+//                       GL_STATIC_DRAW);
+//
+//          glEnableVertexAttribArray(3);
+//          glVertexAttribIPointer(3, 3, GL_INT, GL_FALSE, 0);
+//      }
+//
+//      // todo bbone weight
+//      if(!shape.mesh.normals.empty()) {
+//          std::vector<float> mojvec;
+//          for (int i=0; i<shape.mesh.positions.size()/3;i++){
+//              mojvec.push_back(i);
+//              mojvec.push_back(i+1);
+//              mojvec.push_back(i+2);
+//          }
+//          // Generate and upload a buffer with texture coordinates to GPU
+//          glGenBuffers(1, &buffer.boneWeight);
+//          glBindBuffer(GL_ARRAY_BUFFER, buffer.boneWeight);
+//          glBufferData(GL_ARRAY_BUFFER, shape.mesh.positions.size() * sizeof(float), mojvec.data(),
+//                       GL_STATIC_DRAW);
+//
+//          glEnableVertexAttribArray(4);
+//          glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+//      }
 
     // Generate and upload a buffer with indices to GPU
     glGenBuffers(1, &buffer.ibo);
