@@ -2,11 +2,10 @@
 #include <memory>
 
 #include <ppgso/ppgso.h>
-#include <src/BP/skeleton/skeleton.h>
 
 #include "scene.h"
 #include "src/projekt/object.h"
-#include "src/BP/models/boneModel.h"
+
 
 using namespace glm;
 

@@ -1,6 +1,5 @@
 
 #include "src/BP/scene.h"
-#include "src/BP/skeleton/fileLoader.h"
 #include "bonev2.h"
 
 
@@ -37,6 +36,7 @@ void Bonev2::updateBone(quat parrentRotQuat) {
 }
 
 void Bonev2::updateRootBone() {
+    this->temp++;
     auto presun = glm::vec3(0,0,0);
     glm::quat rotQuat = glm::quat(glm::vec3(glm::radians(0.0f),glm::radians(0.0f),glm::radians(0.0f)));
 
@@ -51,9 +51,14 @@ void Bonev2::generateModelMatrix(glm::vec3 parentPos, quat parentRotationQuat) {
 
 //    glm::quat finalQuat = quat * parentRotationQuat;
 //    glm::quat finalQuat = parentRotationQuat;
+    glm::quat myRot;
 
+  if (this->id == 2 && this->parrent->temp > 5) {
+      myRot = glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(50.0f), glm::radians(0.0f)));
+  } else {
+      myRot = glm::quat(glm::vec3(glm::radians(0.0f), glm::radians(0.0f), glm::radians(0.0f)));
+  }
 
-        glm::quat myRot = glm::quat(glm::vec3(glm::radians(00.0f),glm::radians(0.0f),glm::radians(0.0f)));
 
     glm::mat4 rotMat = glm::toMat4(myRot);
     this->vector =

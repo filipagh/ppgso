@@ -16,6 +16,8 @@ public:
 
     Bonev2(int id, int parentId, std::string name, glm::vec3 offset, glm::vec3 boneLength);
 
+    int temp = 0;
+
     std::list<Bonev2*> childrenBones;
     int parentId;
     Bonev2 *parrent = nullptr;

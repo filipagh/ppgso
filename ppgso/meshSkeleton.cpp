@@ -9,7 +9,10 @@ ppgso::MeshSkeleton::MeshSkeleton(const std::string &obj_file, const std::string
   // Load OBJ file
   shapes.clear();
   materials.clear();
-  std::string err = tinyobj::LoadObj(shapes, materials, obj_file.c_str());
+
+
+
+  std::string err = tinyobj::LoadObj(shapes, materials, obj_file.c_str(), nullptr, &br_file);
 
   if (!err.empty()) {
     std::stringstream msg;
@@ -58,17 +61,13 @@ ppgso::MeshSkeleton::MeshSkeleton(const std::string &obj_file, const std::string
       glEnableVertexAttribArray(2);
       glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     }
-      std::vector<int> boneIds;
-      std::vector<float> boneWeight;
-
-      FileLoader::loadBoneRigFromFile(br_file,boneIds,boneWeight);
 
       if (!shape.mesh.normals.empty()) {
 
           // Generate and upload a buffer with texture coordinates to GPU
           glGenBuffers(1, &buffer.boneIds);
           glBindBuffer(GL_ARRAY_BUFFER, buffer.boneIds);
-          glBufferData(GL_ARRAY_BUFFER, shape.mesh.positions.size() * sizeof(int), boneIds.data(),
+          glBufferData(GL_ARRAY_BUFFER, shape.mesh.positions.size() * sizeof(int), shape.mesh.boneIndex.data(),
                        GL_STATIC_DRAW);
 
           glEnableVertexAttribArray(3);
@@ -80,7 +79,7 @@ ppgso::MeshSkeleton::MeshSkeleton(const std::string &obj_file, const std::string
           // Generate and upload a buffer with texture coordinates to GPU
           glGenBuffers(1, &buffer.boneWeight);
           glBindBuffer(GL_ARRAY_BUFFER, buffer.boneWeight);
-          glBufferData(GL_ARRAY_BUFFER, shape.mesh.positions.size() * sizeof(float), boneWeight.data(),
+          glBufferData(GL_ARRAY_BUFFER, shape.mesh.positions.size() * sizeof(float), shape.mesh.boneWeight.data(),
                        GL_STATIC_DRAW);
 
           glEnableVertexAttribArray(4);

@@ -40,6 +40,8 @@ typedef struct {
   std::vector<float> positions;
   std::vector<float> normals;
   std::vector<float> texcoords;
+  std::vector<float> boneWeight;
+  std::vector<int> boneIndex;
   std::vector<unsigned int> indices;
   std::vector<int> material_ids; // per-mesh material ID
 } mesh_t;
@@ -79,14 +81,15 @@ private:
 /// 'mtl_basepath' is optional, and used for base path for .mtl file.
 std::string LoadObj(std::vector<shape_t> &shapes,       // [output]
                     std::vector<material_t> &materials, // [output]
-                    const char *filename, const char *mtl_basepath = nullptr);
+                    const char *filename, const char *mtl_basepath = nullptr, const std::string *filename_br = nullptr);
 
 /// Loads object from a std::istream, uses GetMtlIStreamFn to retrieve
 /// std::istream for materials.
 /// Returns empty string when loading .obj success.
 std::string LoadObj(std::vector<shape_t> &shapes,       // [output]
                     std::vector<material_t> &materials, // [output]
-                    std::istream &inStream, MaterialReader &readMatFn);
+                    std::istream &inStream, MaterialReader &readMatFn,
+                    const std::string *filename_br = nullptr);
 
 /// Loads materials into std::map
 /// Returns an empty string if successful

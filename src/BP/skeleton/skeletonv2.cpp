@@ -1,6 +1,5 @@
 
 #include "src/BP/scene.h"
-#include "skeleton.h"
 #include "skeletonv2.h"
 #include "bonev2.h"
 

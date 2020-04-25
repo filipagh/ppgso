@@ -2,13 +2,13 @@
 #include <memory>
 
 #include <ppgso/ppgso.h>
-#include <src/BP/skeleton/skeleton.h>
+
 #include <src/BP/skeleton/bonev2.h>
 #include <src/BP/skeleton/skeletonv2.h>
 
 #include "src/BP/scene.h"
 #include "src/projekt/object.h"
-#include "src/BP/models/boneModel.h"
+
 #include "cubeModel.h"
 
 /*!

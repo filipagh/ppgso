@@ -16,48 +16,48 @@ out vec2 texCoord;
 
 void main() {
 
-//
-//    mat4 totalPos = mat4(0);// final position vector
-//
-//    int boneI = BoneIds[0];//actual processing bone
-//    int counter = 0;//while iterate counter
-//    while (boneI != 0) {
-//        boneI--;//negate offset
-//
-//
-//        totalPos += (SkeletonModelMatrix[boneI] * BoneWeights[counter]);
-//        boneI++;
-//        counter++;
-//        if (counter == 3) {
-//            break;
-//        }
-//        boneI = BoneIds[counter];
-//    }
-//    gl_Position = ProjectionMatrix * ViewMatrix *totalPos*  vec4(Position.xyz, 1);
-////    gl_Position = ProjectionMatrix * ViewMatrix *totalPos*  vec4(Position, 1.0);
-//
-//
-
 
     mat4 totalPos = mat4(0);// final position vector
 
-    int boneI = 1;//actual processing bone
+    int boneI = BoneIds[0];//actual processing bone
     int counter = 0;//while iterate counter
-//    while (boneI != 0) {
+    while (boneI != 0) {
         boneI--;//negate offset
 
 
-        totalPos += (SkeletonModelMatrix[boneI] * 1.0);
+        totalPos += (SkeletonModelMatrix[boneI] * BoneWeights[counter]);
         boneI++;
         counter++;
         if (counter == 3) {
-//            break;
+            break;
         }
         boneI = BoneIds[counter];
-//    }
+    }
     gl_Position = ProjectionMatrix * ViewMatrix *totalPos*  vec4(Position.xyz, 1);
 //    gl_Position = ProjectionMatrix * ViewMatrix *totalPos*  vec4(Position, 1.0);
 
+
+
+//
+//    mat4 totalPos = mat4(0);// final position vector
+//
+//    int boneI = 1;//actual processing bone
+//    int counter = 0;//while iterate counter
+////    while (boneI != 0) {
+//        boneI--;//negate offset
+//
+//
+//        totalPos += (SkeletonModelMatrix[boneI] * 1.0);
+//        boneI++;
+//        counter++;
+//        if (counter == 3) {
+////            break;
+//        }
+//        boneI = BoneIds[counter];
+////    }
+//    gl_Position = ProjectionMatrix * ViewMatrix *totalPos*  vec4(Position.xyz, 1);
+////    gl_Position = ProjectionMatrix * ViewMatrix *totalPos*  vec4(Position, 1.0);
+//
 
 
 

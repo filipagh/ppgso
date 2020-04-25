@@ -2,7 +2,7 @@
 #include <memory>
 
 #include <ppgso/ppgso.h>
-#include <src/BP/skeleton/skeleton.h>
+
 #include <meshSkeleton.h>
 #include <src/BP/skeleton/skeletonv2.h>
 

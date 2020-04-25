@@ -1,5 +1,5 @@
 #include <glm/gtc/random.hpp>
-#include "boneModel.h"
+
 
 #include "src/BP/mainScene.h"
 #include "cubeModel.h"

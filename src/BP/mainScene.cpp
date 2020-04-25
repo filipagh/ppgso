@@ -4,22 +4,16 @@
 
 
 
-#include "src/BP/models/skeletonModel.h"
+
 
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_light_glsl.h>
-#include <src/BP/skeleton/fileLoader.h>
-#include <src/BP/skeleton/skeleton.h>
 #include <src/BP/fileLoaders/fileLoader.h>
 #include <src/BP/models/skinSkeletonModel.h>
 #include <src/BP/models/skeletonModelv2.h>
 
 
-//// shared resources
-//std::unique_ptr<ppgso::Mesh> Player::mesh;
-//std::unique_ptr<ppgso::Texture> Player::texture;
-//std::unique_ptr<ppgso::Shader> Player::shader;
 
 MainScene::MainScene() {
 
@@ -33,24 +27,13 @@ void MainScene::init() {
     camera = move(camera);
 
 
-//
-//    std::unique_ptr<SkeletonModelv2> objj;
-//    objj = std::make_unique<SkeletonModelv2>(FileLoader::loadSkeletonFromFile("postavicka.sk"));
-//    objects.push_back(move(objj));
 
-//    std::unique_ptr<SkeletonModel> obj;
-//    obj = std::make_unique<SkeletonModel>(FileLoader::loadSkeletonFromFile("postavicka.sk"));
-//    objects.push_back(move(obj));
-
-
-//    std::unique_ptr<SkinSkeletonModel> obj;
-//    obj = std::make_unique<SkinSkeletonModel>("postavicka.obj", "postavicka.br", "postavicka.bmp", "postavicka.sk");
-////    obj = std::make_unique<SkinSkeletonModel>("test.obj", "test.br", "postavicka.bmp", "test.sk");
-//    objects.push_back(move(obj));
-
+    std::unique_ptr<SkeletonModelv2> objj;
+    objj = std::make_unique<SkeletonModelv2>(FileLoader::loadSkeletonFromFile("postavicka.sk"));
+    objects.push_back(move(objj));
 
     std::unique_ptr<SkinSkeletonModel> obj;
-    obj = std::make_unique<SkinSkeletonModel>("postavickaPostupne.obj", "postavicka.br", "postavicka.bmp", "postavicka.sk");
+    obj = std::make_unique<SkinSkeletonModel>("postavicka.obj", "postavicka.br", "postavicka.bmp", "postavicka.sk");
 //    obj = std::make_unique<SkinSkeletonModel>("test.obj", "test.br", "postavicka.bmp", "test.sk");
     objects.push_back(move(obj));
 

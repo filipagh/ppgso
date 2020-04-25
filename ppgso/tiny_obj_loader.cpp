@@ -40,6 +40,7 @@
 #include <map>
 #include <fstream>
 #include <sstream>
+#include <src/BP/fileLoaders/fileLoader.h>
 
 #include "tiny_obj_loader.h"
 
@@ -300,12 +301,12 @@ static vertex_index parseTriple(const char *&token, int vsize, int vnsize,
 }
 
 static unsigned int
-updateVertex(std::map<vertex_index, unsigned int> &vertexCache,
-             std::vector<float> &positions, std::vector<float> &normals,
-             std::vector<float> &texcoords,
-             const std::vector<float> &in_positions,
-             const std::vector<float> &in_normals,
-             const std::vector<float> &in_texcoords, const vertex_index &i) {
+updateVertex(std::map<vertex_index, unsigned int> &vertexCache, std::vector<float> &positions,
+             std::vector<float> &normals, std::vector<float> &texcoords,
+             std::vector<float> &boneWeight, std::vector<int> &boneIndex,
+             const std::vector<float> &in_positions, const std::vector<float> &in_normals,
+             const std::vector<float> &in_texcoords, const vertex_index &i,
+             const std::vector<float> &in_boneWeight, const std::vector<int> &in_boneIndex) {
   const std::map<vertex_index, unsigned int>::iterator it = vertexCache.find(i);
 
   if (it != vertexCache.end()) {
@@ -318,6 +319,16 @@ updateVertex(std::map<vertex_index, unsigned int> &vertexCache,
   positions.push_back(in_positions[3 * i.v_idx + 0]);
   positions.push_back(in_positions[3 * i.v_idx + 1]);
   positions.push_back(in_positions[3 * i.v_idx + 2]);
+
+    if (!in_boneWeight.empty()) {
+        boneWeight.push_back(in_boneWeight[3 * i.v_idx + 0]);
+        boneWeight.push_back(in_boneWeight[3 * i.v_idx + 1]);
+        boneWeight.push_back(in_boneWeight[3 * i.v_idx + 2]);
+
+        boneIndex.push_back(in_boneIndex[3 * i.v_idx + 0]);
+        boneIndex.push_back(in_boneIndex[3 * i.v_idx + 1]);
+        boneIndex.push_back(in_boneIndex[3 * i.v_idx + 2]);
+    }
 
   if (i.vn_idx >= 0) {
     normals.push_back(in_normals[3 * i.vn_idx + 0]);
@@ -365,7 +376,10 @@ static bool exportFaceGroupToShape(
     const std::vector<float> &in_normals,
     const std::vector<float> &in_texcoords,
     const std::vector<std::vector<vertex_index>> &faceGroup,
-    const int material_id, const std::string &name, bool clearCache) {
+    const int material_id, const std::string &name, bool clearCache,
+    const std::vector<float> &in_boneWeight,
+    const std::vector<int> &in_boneIndex
+    ) {
   if (faceGroup.empty()) {
     return false;
   }
@@ -389,14 +403,17 @@ static bool exportFaceGroupToShape(
       i2 = face[k];
 
       unsigned int v0 = updateVertex(
-          vertexCache, shape.mesh.positions, shape.mesh.normals,
-          shape.mesh.texcoords, in_positions, in_normals, in_texcoords, i0);
+              vertexCache, shape.mesh.positions, shape.mesh.normals,
+              shape.mesh.texcoords, shape.mesh.boneWeight, shape.mesh.boneIndex, in_positions, in_normals, in_texcoords, i0,
+              in_boneWeight, in_boneIndex);
       unsigned int v1 = updateVertex(
-          vertexCache, shape.mesh.positions, shape.mesh.normals,
-          shape.mesh.texcoords, in_positions, in_normals, in_texcoords, i1);
+              vertexCache, shape.mesh.positions, shape.mesh.normals,
+              shape.mesh.texcoords, shape.mesh.boneWeight, shape.mesh.boneIndex, in_positions, in_normals, in_texcoords, i1,
+              in_boneWeight, in_boneIndex);
       unsigned int v2 = updateVertex(
-          vertexCache, shape.mesh.positions, shape.mesh.normals,
-          shape.mesh.texcoords, in_positions, in_normals, in_texcoords, i2);
+              vertexCache, shape.mesh.positions, shape.mesh.normals,
+              shape.mesh.texcoords, shape.mesh.boneWeight, shape.mesh.boneIndex, in_positions, in_normals, in_texcoords, i2,
+              in_boneWeight, in_boneIndex);
 
       shape.mesh.indices.push_back(v0);
       shape.mesh.indices.push_back(v1);
@@ -670,7 +687,7 @@ std::string MaterialFileReader::operator()(const std::string &matId,
 
 std::string LoadObj(std::vector<shape_t> &shapes,
                     std::vector<material_t> &materials, // [output]
-                    const char *filename, const char *mtl_basepath) {
+                    const char *filename, const char *mtl_basepath, const std::string *filename_br) {
 
   shapes.clear();
 
@@ -688,12 +705,13 @@ std::string LoadObj(std::vector<shape_t> &shapes,
   }
   MaterialFileReader matFileReader(basePath);
 
-  return LoadObj(shapes, materials, ifs, matFileReader);
+  return LoadObj(shapes, materials, ifs, matFileReader, filename_br);
 }
 
 std::string LoadObj(std::vector<shape_t> &shapes,
                     std::vector<material_t> &materials, // [output]
-                    std::istream &inStream, MaterialReader &readMatFn) {
+                    std::istream &inStream, MaterialReader &readMatFn,
+                    const std::string *filename_br ) {
   std::stringstream err;
 
   std::vector<float> v;
@@ -805,9 +823,15 @@ std::string LoadObj(std::vector<shape_t> &shapes,
       sscanf(token, "%s", namebuf);
 #endif
 
+         std::vector<int> boneIds;
+         std::vector<float> boneWeight;
+        if (filename_br != nullptr) {
+            FileLoader::loadBoneRigFromFile(*filename_br,boneIds,boneWeight);
+        }
+
       // Create face group per material.
       bool ret = exportFaceGroupToShape(shape, vertexCache, v, vn, vt,
-                                        faceGroup, material, name, true);
+                                        faceGroup, material, name, true, boneWeight, boneIds);
       if (ret) {
         shapes.push_back(shape);
       }
@@ -845,10 +869,14 @@ std::string LoadObj(std::vector<shape_t> &shapes,
 
     // group name
     if (token[0] == 'g' && isSpace((token[1]))) {
-
+        std::vector<int> boneIds;
+        std::vector<float> boneWeight;
+        if (filename_br != nullptr) {
+            FileLoader::loadBoneRigFromFile(*filename_br,boneIds,boneWeight);
+        }
       // flush previous face group.
       bool ret = exportFaceGroupToShape(shape, vertexCache, v, vn, vt,
-                                        faceGroup, material, name, true);
+                                        faceGroup, material, name, true, boneWeight,boneIds );
       if (ret) {
         shapes.push_back(shape);
       }
@@ -879,10 +907,14 @@ std::string LoadObj(std::vector<shape_t> &shapes,
 
     // object name
     if (token[0] == 'o' && isSpace((token[1]))) {
-
+        std::vector<int> boneIds;
+        std::vector<float> boneWeight;
+        if (filename_br != nullptr) {
+            FileLoader::loadBoneRigFromFile(*filename_br,boneIds,boneWeight);
+        }
       // flush previous face group.
       bool ret = exportFaceGroupToShape(shape, vertexCache, v, vn, vt,
-                                        faceGroup, material, name, true);
+                                        faceGroup, material, name, true, boneWeight,boneIds);
       if (ret) {
         shapes.push_back(shape);
       }
@@ -906,9 +938,13 @@ std::string LoadObj(std::vector<shape_t> &shapes,
 
     // Ignore unknown command.
   }
-
+    std::vector<int> boneIds;
+    std::vector<float> boneWeight;
+    if (filename_br != nullptr) {
+        FileLoader::loadBoneRigFromFile(*filename_br,boneIds,boneWeight);
+    }
   bool ret = exportFaceGroupToShape(shape, vertexCache, v, vn, vt, faceGroup,
-                                    material, name, true);
+                                    material, name, true,boneWeight, boneIds);
   if (ret) {
     shapes.push_back(shape);
   }
