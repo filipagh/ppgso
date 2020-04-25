@@ -37,6 +37,7 @@ Scene* ParticleWindow::rendersScene = nullptr;
     ParticleWindow::ParticleWindow(std::string title, int width, int height) : Window(std::move(title), width, height) {
         // Initialize OpenGL state
         // Enable Z-buffer
+//        glDisable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
     }

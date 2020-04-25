@@ -1,7 +1,8 @@
 #pragma once
 #include <list>
 #include <ppgso/ppgso.h>
-#include <src/BP/skeleton/skeleton.h>
+#include <src/BP/skeleton/skeletonv2.h>
+#include <src/BP/skeleton/bonev2.h>
 
 
 /*!
@@ -11,10 +12,10 @@
  */
 class FileLoader {
 private:
-    static Bone* loadBoneFromLine(std::basic_ifstream<char>* ifstream);
+    static Bonev2 * loadBoneFromLine(std::basic_ifstream<char>* ifstream);
 
 public:
-    static Skeleton* loadSkeletonFromFile(std::string file);
+    static Skeletonv2 *loadSkeletonFromFile(std::string file);
 
     static void loadBoneRigFromFile(std::string file,  std::vector<int> &boneIds, std::vector<float > &boneWeights);
 

@@ -13,7 +13,7 @@ class Camera {
 public:
   int angleX = 90;
   int angleY = 90;
-  glm::vec3 positionBase{0,0,50};
+  glm::vec3 positionBase{0,0,20};
 
   glm::vec3 up{0,1,0};
   glm::vec3 position{0,0,0};

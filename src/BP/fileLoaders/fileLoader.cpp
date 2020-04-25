@@ -1,11 +1,12 @@
 
 #include <sstream>
+#include <src/BP/skeleton/skeletonv2.h>
 #include "src/BP/fileLoaders/fileLoader.h"
 
 
-Skeleton* FileLoader::loadSkeletonFromFile(std::string file) {
+Skeletonv2 * FileLoader::loadSkeletonFromFile(std::string file) {
 
-    auto skeleton = new Skeleton();
+    auto skeleton = new Skeletonv2();
 
     std::ifstream input(file);
 
@@ -19,14 +20,15 @@ Skeleton* FileLoader::loadSkeletonFromFile(std::string file) {
     return skeleton;
 }
 
-Bone* FileLoader::loadBoneFromLine(std::basic_ifstream<char>* ifstream) {
+Bonev2* FileLoader::loadBoneFromLine(std::basic_ifstream<char>* ifstream) {
     int id;
     std::string name;
     int parentId;
     float x,y,z;
-    *ifstream >> id >> name >> parentId >> x >> y >> z;
+    float boneLenghtx, boneLenghty, boneLenghtz;
+    *ifstream >> id >> name >> parentId >> x >> y >> z >> boneLenghtx >> boneLenghty >> boneLenghtz;
 
-    return new Bone(id, parentId, name, glm::vec3(x, y, z));
+    return new Bonev2(id, parentId, name, glm::vec3(x, y, z), glm::vec3(boneLenghtx, boneLenghty, boneLenghtz));
 }
 
 void FileLoader::loadBoneRigFromFile(std::string file, std::vector<int> &boneIds, std::vector<float> &boneWeights) {

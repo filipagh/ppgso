@@ -13,6 +13,7 @@
 #include <src/BP/skeleton/skeleton.h>
 #include <src/BP/fileLoaders/fileLoader.h>
 #include <src/BP/models/skinSkeletonModel.h>
+#include <src/BP/models/skeletonModelv2.h>
 
 
 //// shared resources
@@ -32,13 +33,24 @@ void MainScene::init() {
     camera = move(camera);
 
 
+//
+//    std::unique_ptr<SkeletonModelv2> objj;
+//    objj = std::make_unique<SkeletonModelv2>(FileLoader::loadSkeletonFromFile("postavicka.sk"));
+//    objects.push_back(move(objj));
 
 //    std::unique_ptr<SkeletonModel> obj;
 //    obj = std::make_unique<SkeletonModel>(FileLoader::loadSkeletonFromFile("postavicka.sk"));
 //    objects.push_back(move(obj));
-//
+
+
+//    std::unique_ptr<SkinSkeletonModel> obj;
+//    obj = std::make_unique<SkinSkeletonModel>("postavicka.obj", "postavicka.br", "postavicka.bmp", "postavicka.sk");
+////    obj = std::make_unique<SkinSkeletonModel>("test.obj", "test.br", "postavicka.bmp", "test.sk");
+//    objects.push_back(move(obj));
+
+
     std::unique_ptr<SkinSkeletonModel> obj;
-    obj = std::make_unique<SkinSkeletonModel>("postavicka.obj", "postavicka.br", "postavicka.bmp", "postavicka.sk");
+    obj = std::make_unique<SkinSkeletonModel>("postavickaPostupne.obj", "postavicka.br", "postavicka.bmp", "postavicka.sk");
 //    obj = std::make_unique<SkinSkeletonModel>("test.obj", "test.br", "postavicka.bmp", "test.sk");
     objects.push_back(move(obj));
 
@@ -109,7 +121,7 @@ void MainScene::keyEvent(int key, int scanCode, int action, int mods) {
 }
 
 void MainScene::handleCameraAnglesX() {
-    int m_radius = 50;
+    int m_radius = 10;
     float x = m_radius * glm::sin(glm::radians((float) camera->angleY)) * glm::sin(glm::radians((float) camera->angleX));
     float y = m_radius * glm::cos(glm::radians((float) camera->angleY));
     float z = m_radius * glm::sin(glm::radians((float) camera->angleY)) * cosf(glm::radians((float) camera->angleX));

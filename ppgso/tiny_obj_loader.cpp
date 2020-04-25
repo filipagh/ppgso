@@ -267,6 +267,10 @@ static vertex_index parseTriple(const char *&token, int vsize, int vnsize,
   vertex_index vi(-1);
 
   vi.v_idx = fixIndex(atoi(token), vsize);
+  if (vi.v_idx == 248) {
+      int a = 5;
+  }
+
   token += strcspn(token, "/ \t\r");
   if (token[0] != '/') {
     return vi;
@@ -368,6 +372,9 @@ static bool exportFaceGroupToShape(
 
   // Flatten vertices and indices
   for (size_t i = 0; i < faceGroup.size(); i++) {
+      if (i == 248) {
+          int a = 4;
+      }
     const std::vector<vertex_index> &face = faceGroup[i];
 
     vertex_index i0 = face[0];

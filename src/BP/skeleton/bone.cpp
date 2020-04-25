@@ -55,8 +55,8 @@ void Bone::generateModelMatrix(glm::vec3 parentPos, quat parentRotationQuat) {
     glm::mat4 rotMat = glm::toMat4(finalQuat);
     this->vector =
              glm::translate(glm::mat4{1}, parentPos)
-             * rotMat
-             * glm::scale(glm::mat4(1.0f), glm::vec3{1,glm::length(boneLength),1});
+             * rotMat;
+//             * glm::scale(glm::mat4(1.0f), glm::vec3{1,glm::length(boneLength),1});
 
     this->position = parentPos + (parentRotationQuat * boneLength);
     this->rotation = parentRotationQuat;

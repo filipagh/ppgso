@@ -1,13 +1,23 @@
 
 #include "src/BP/scene.h"
 #include "skeleton.h"
+#include "skeletonv2.h"
+#include "bonev2.h"
 
 
+Skeletonv2* Skeletonv2::mockSkeleton() {
 
-Skeleton* Skeleton::mockSkeleton() {
-//    Bone *b1 = new Bone(glm::vec3{1,0,0});
-//    Bone *b2 = new Bone(glm::vec3{1,2,0});
-//    Bone *b3 = new Bone(glm::vec3{0,10,0});
+    auto skel = new Skeletonv2;
+
+    Bonev2 *b1 = new Bonev2( 1, 0, "Torso", glm::vec3{0,0,0} ,glm::vec3{0,5,0});
+    Bonev2 *b2 = new Bonev2(2, 1,"Torso",  glm::vec3{0,5,0} ,glm::vec3{0,5,0});
+    Bonev2 *b3 = new Bonev2(3, 2,"Torso",  glm::vec3{0,5,0} ,glm::vec3{0,5,0});
+
+    skel->addBone(b1);
+    skel->addBone(b2);
+    skel->addBone(b3);
+
+    return skel;
 ////
 //    b2->addChild(*b3);
 //    b1->addChild(*b2);
@@ -28,29 +38,33 @@ Skeleton* Skeleton::mockSkeleton() {
 //    return new Skeleton();
 }
 
-Skeleton::Skeleton() {
+Skeletonv2::Skeletonv2() {
 }
 
-void Skeleton::updateSkeleton() {
+void Skeletonv2::updateSkeleton() {
     rootBone->updateRootBone();
+    if (inverseBaseBoneMap.empty()) {
+        for (int i = 1; i<= boneCount; i++) {
+            inverseBaseBoneMap[boneMap[i]->id] = glm::inverse(boneMap[i]->vector);
+        }
+    }
 }
 
-void Skeleton::addBone(Bone *bone) {
+void Skeletonv2::addBone(Bonev2 *bone) {
     boneCount++;
     boneMap[bone->id] = bone;
     if (bone->parentId != 0) {
-        Bone* parent = boneMap[bone->parentId];
+        Bonev2* parent = boneMap[bone->parentId];
         parent->addChild(bone);
     } else {
         rootBone = bone;
     }
 }
 
-std::vector<glm::mat4> Skeleton::getSkeletonProjectionMatrix() {
+std::vector<glm::mat4> Skeletonv2::getSkeletonProjectionMatrix() {
     std::vector<glm::mat4> vector;
     for (int i = 1; i<= boneCount; i++) {
-//        vector.push_back(glm::mat4(1));
-        vector.push_back(boneMap[i]->vector);
+        vector.push_back(boneMap[i]->vector * inverseBaseBoneMap[i]);
     }
     return vector;
 }

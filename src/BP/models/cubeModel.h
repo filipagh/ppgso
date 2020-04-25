@@ -3,8 +3,7 @@
 
 #include <ppgso/ppgso.h>
 #include <src/BP/skeleton/skeleton.h>
-#include <meshSkeleton.h>
-#include <src/BP/skeleton/skeletonv2.h>
+#include <src/BP/skeleton/bonev2.h>
 
 #include "src/BP/scene.h"
 #include "src/projekt/object.h"
@@ -15,19 +14,19 @@
  * It initializes and loads all resources only once
  * It will move down along the Y axis and self delete when reaching below -10
  */
-class SkinSkeletonModel final : public Object {
+class CubeModel final : public Object {
 private:
+  Bonev2 *bone;
 
-
-  static std::unique_ptr<ppgso::MeshSkeleton> mesh;
+  static std::unique_ptr<ppgso::Mesh> mesh;
   static std::unique_ptr<ppgso::Shader> shader;
   static std::unique_ptr<ppgso::Texture> texture;
   glm::vec3 color{0,20,0};
 
 
 public:
-    SkinSkeletonModel(const std::string &obj_file, const std::string &br_file, const std::string &bmp_file,
-                      const std::string &sk_file);
+
+    CubeModel(Bonev2 &bone);
 
   /*!
    * Update asteroid
@@ -49,7 +48,6 @@ public:
   void onClick(Scene &scene) override;
 
 private:
-
-    Skeletonv2 *skeleton;
+    bool borderDie();
 };
 
