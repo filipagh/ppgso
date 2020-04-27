@@ -17,7 +17,7 @@
 
 
 bool SkeletonModelv2::update(Scene &scene, float dt) {
-    skeleton->updateSkeleton();
+    skeleton->updateSkeleton(Skeletonv2::generateSkeletonBaseMatrix({0,0,0}));
     return true;
 }
 
@@ -31,8 +31,8 @@ void SkeletonModelv2::onClick(Scene &scene) {}
 
 SkeletonModelv2::SkeletonModelv2(Skeletonv2 *skeleton) {
     this->skeleton = skeleton;
-    this->skeleton->updateSkeleton();
-    this->renderSkeleton();
+//    this->skeleton->updateSkeleton(NULL);
+//    this->renderSkeleton();
 }
 
 void SkeletonModelv2::renderSkeleton() {

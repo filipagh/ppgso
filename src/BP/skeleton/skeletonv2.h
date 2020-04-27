@@ -15,10 +15,9 @@ public:
 
     Skeletonv2();
 
-    static Skeletonv2* mockSkeleton();
+    void updateSkeleton(glm::mat4 modelBaseMat);
 
-    void updateSkeleton();
-
+    std::map<int, glm::quat> boneActualPose;
 
     std::map<int, Bonev2*> boneMap;
     std::map<int, glm::mat4> inverseBaseBoneMap;
@@ -31,5 +30,8 @@ public:
     int boneCount = 0;
 
     void addBone(Bonev2 *bone);
+
+
+    static glm::mat4 generateSkeletonBaseMatrix(glm::vec3 basePosition);
 };
 

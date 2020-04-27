@@ -24,7 +24,7 @@ std::unique_ptr<ppgso::Texture> SkinSkeletonModel::texture;
 std::unique_ptr<ppgso::Shader> SkinSkeletonModel::shader;
 
 bool SkinSkeletonModel::update(Scene &scene, float dt) {
-    skeleton->updateSkeleton();
+    skeleton->updateSkeleton(Skeletonv2::generateSkeletonBaseMatrix({0,0,0}));
     return true;
 }
 

@@ -23,6 +23,7 @@ std::unique_ptr<ppgso::Mesh> CubeModel::mesh;
 std::unique_ptr<ppgso::Texture> CubeModel::texture;
 std::unique_ptr<ppgso::Shader> CubeModel::shader;
 
+
 bool CubeModel::update(Scene &scene, float dt) {
     return true;
 }

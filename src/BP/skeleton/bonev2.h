@@ -9,8 +9,6 @@
  * On Update checks collisions with Asteroid objects in the scene
  */
 class Bonev2 {
-private:
-    void updateBone(glm::quat parrentRotQuat);
 
 public:
 
@@ -39,10 +37,10 @@ public:
 
     void addChild(Bonev2 *bone);
 
-    void generateRootModelMatrix(glm::vec3 globalOffset, glm::quat globalRotation);
-
     void generateModelMatrix(glm::vec3 parentPos, glm::quat parentRotationQuat);
 
-    void updateRootBone();
+    void generateBoneMatrix(glm::mat4 parentMat, const std::map<int, glm::quat> &boneRotMat);
+
+    void updateBones(glm::mat4 parentMat, const std::map<int, glm::quat>& boneRotMap);
 };
 

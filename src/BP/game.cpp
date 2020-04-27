@@ -20,6 +20,7 @@
 #include <shaders/color_vert_glsl.h>
 #include <shaders/color_frag_glsl.h>
 #include <src/BP/fileLoaders/fileLoader.h>
+#include <src/BP/skeleton/replayAnimator.h>
 
 const unsigned int SIZE = 1028;
 
@@ -77,6 +78,7 @@ Scene* ParticleWindow::rendersScene = nullptr;
 
 int main() {
     // Create new window
+
     auto window = ParticleWindow{"BP", SIZE, SIZE};
     MainScene sceneGarage = {};
     ParticleWindow::changeScene(&sceneGarage, true);

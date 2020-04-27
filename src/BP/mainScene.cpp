@@ -1,6 +1,7 @@
 
 #include <src/BP/scene.h>
 #include <src/BP/mainScene.h>
+#include <src/BP/skeleton/boneMapper.h>
 
 
 
@@ -28,10 +29,12 @@ void MainScene::init() {
 
 
 
-    std::unique_ptr<SkeletonModelv2> objj;
-    objj = std::make_unique<SkeletonModelv2>(FileLoader::loadSkeletonFromFile("postavicka.sk"));
-    objects.push_back(move(objj));
+//    std::unique_ptr<SkeletonModelv2> objj;
+//    objj = std::make_unique<SkeletonModelv2>(FileLoader::loadSkeletonFromFile("postavicka.sk"));
+//    objects.push_back(move(objj));
 
+
+    BoneMapper::replayAnimator = new ReplayAnimator("/home/filipagh/Desktop/fagh/p12.bvh", 0);
     std::unique_ptr<SkinSkeletonModel> obj;
     obj = std::make_unique<SkinSkeletonModel>("postavicka.obj", "postavicka.br", "postavicka.bmp", "postavicka.sk");
 //    obj = std::make_unique<SkinSkeletonModel>("test.obj", "test.br", "postavicka.bmp", "test.sk");
@@ -70,7 +73,6 @@ void MainScene::keyEvent(int key, int scanCode, int action, int mods) {
 
     if (key == GLFW_KEY_SPACE) {
         // TODO: Add renderable object to the scene
-        int i = 5;
 //        addParticle();
     }
     if (key == GLFW_KEY_G && action == GLFW_PRESS) {
