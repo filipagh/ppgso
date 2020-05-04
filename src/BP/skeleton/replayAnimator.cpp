@@ -1,10 +1,11 @@
 
 #include "map"
-#include <glm/ext/quaternion_float.hpp>
+//#include <glm/ext/quaternion_float.hpp>
 #include <sstream>
 #include "replayAnimator.h"
 
 std::map<int, glm::quat> ReplayAnimator::getKeyFrameData(float time) {
+
     float deltaTime = fmodf(time,(this->timePerKeyFrame * (float)this->keyFrames.size()));
     auto data = this->getKeyFrame(deltaTime);
 if (data.empty()) {
@@ -43,13 +44,14 @@ ReplayAnimator::ReplayAnimator(const std::string &bvh_file, float startTime) {
 std::map<int, glm::quat> ReplayAnimator::getKeyFrameFromLine(const std::string& string) {
     float x,y,z;
     std::stringstream head(string);
-    head >> x >> y >> z; // ignor offset;
+//    head >> x >> y >> z; // ignor offset;
+    head >> y >> z >> x; // ignor offset;
 
     int counter = 1;
     std::map<int, glm::quat> data;
     while (!head.eof()) {
         head >> z >> y >> x;
-        data[counter] = ReplayAnimator::getQuatFromEuler(x, y, z);;
+        data[counter] = ReplayAnimator::getQuatFromEuler(x, y, z);
         counter++;
     }
     return data;

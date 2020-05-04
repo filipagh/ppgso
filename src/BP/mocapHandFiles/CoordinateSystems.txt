@@ -1,0 +1,55 @@
+//48 coordinate systems
+//In = into screen
+//Out = out of screen
+	// X       Y       Z
+	//----    ----    ----
+//Right handed systems:
+	//Right   In      Up	//Current, AnimaView, 3D Studio Max
+	//Right   Out     Down
+	//Right   Up      Out	//Maya, MotionBuilder
+	//Right   Down    In
+	//Left    In      Down
+	//Left    Out     Up
+	//Left    Up      In
+	//Left    Down    Out
+	//Up      In      Left
+	//Up      Out     Right
+	//Up      Right   In
+	//Up      Left    Out
+	//Down    In      Right
+	//Down    Out     Left
+	//Down    Right   Out
+	//Down    Left    In
+	//In      Up      Right
+	//In      Down    Left
+	//In      Right   Down
+	//In      Left    Up
+	//Out     Up      Left
+	//Out     Down    Right
+	//Out     Right   Up
+	//Out     Left    Down
+//Left handed systems:
+	//Right   In      Down
+	//Right   Out     Up
+	//Right   Up      In	//Unity
+	//Right   Down    Out
+	//Left    In      Up
+	//Left    Out     Down
+	//Left    Up      Out
+	//Left    Down    In
+	//Up      In      Right
+	//Up      Out     Left
+	//Up      Right   Out
+	//Up      Left    In
+	//Down    In      Left
+	//Down    Out     Right
+	//Down    Right   In
+	//Down    Left    Out
+	//In      Up      Left
+	//In      Down    Right
+	//In      Right   Up
+	//In      Left    Down
+	//Out     Up      Right
+	//Out     Down    Left
+	//Out     Right   Down
+	//Out     Left    Up

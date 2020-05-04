@@ -27,45 +27,16 @@ void MainScene::init() {
     camera->up = glm::vec3{0.0f, 1.0f, 0.0f};
     camera = move(camera);
 
-
-
 //    std::unique_ptr<SkeletonModelv2> objj;
 //    objj = std::make_unique<SkeletonModelv2>(FileLoader::loadSkeletonFromFile("postavicka.sk"));
 //    objects.push_back(move(objj));
 
 
-    BoneMapper::replayAnimator = new ReplayAnimator("/home/filipagh/Desktop/fagh/p12.bvh", 0);
+    BoneMapper::replayAnimator = new ReplayAnimator("C:\\Users\\PC\\Desktop\\fagh\\p8k.bvh", 0);
     std::unique_ptr<SkinSkeletonModel> obj;
     obj = std::make_unique<SkinSkeletonModel>("postavicka.obj", "postavicka.br", "postavicka.bmp", "postavicka.sk");
 //    obj = std::make_unique<SkinSkeletonModel>("test.obj", "test.br", "postavicka.bmp", "test.sk");
     objects.push_back(move(obj));
-
-
-//    std::unique_ptr<Wall> obj;
-//    obj = std::make_unique<Wall>();
-////    obj->scale = {10.0f,10.0f,.01f};
-////    obj->position = {0,0,-5.0f};
-////    obj->rotation = {90*ppgso::PI/180,0,0};
-//    objects.push_back(move(obj));
-//
-//
-//
-//
-//    std::unique_ptr<Asteroid> bone;
-//    bone = std::make_unique<Asteroid>();
-////    obj->scale = {10.0f,10.0f,.01f};
-////    obj->position = {0,0,-5.0f};
-////    obj->rotation = {90*ppgso::PI/180,0,0};
-//    objects.push_back(move(bone));
-
-
-
-//    std::unique_ptr<Player> objPlayer;
-//    objPlayer = std::make_unique<Player>();
-//    objPlayer->scale = {10.0f,10.0f,10};
-//    objPlayer->position = {0,-4,0};
-//    objPlayer->rotation = {90*ppgso::PI/180,0,0};
-//    objects.push_back(move(objPlayer));
 
 }
 
@@ -124,79 +95,3 @@ void MainScene::addObject(std::unique_ptr<Object> obj) {
     objects.push_back(move(obj));
 }
 
-
-//bool Player::update(Scene &scene, float dt) {
-////  // Fire delay increment
-////  fireDelay += dt;
-////
-////  // Hit detection
-////  for ( auto& obj : scene.objects ) {
-////    // Ignore self in scene
-////    if (obj.get() == this)
-////      continue;
-////
-////    // We only need to collide with asteroids, ignore other objects
-////    auto asteroid = dynamic_cast<Asteroid*>(obj.get());
-////    if (!asteroid) continue;
-////
-////    if (distance(position, asteroid->position) < asteroid->scale.y) {
-////      // Explode
-////      auto explosion = std::make_unique<Explosion>();
-////      explosion->position = position;
-////      explosion->scale = scale * 3.0f;
-////      scene.objects.push_back(move(explosion));
-////
-////      // Die
-////      return false;
-////    }
-////  }
-////
-////  // Keyboard controls
-////  if(scene.keyboard[GLFW_KEY_LEFT]) {
-////    position.x += 10 * dt;
-////    rotation.z = -ppgso::PI/4.0f;
-////  } else if(scene.keyboard[GLFW_KEY_RIGHT]) {
-////    position.x -= 10 * dt;
-////    rotation.z = ppgso::PI/4.0f;
-////  } else {
-////    rotation.z = 0;
-////  }
-////
-////  // Firing projectiles
-////  if(scene.keyboard[GLFW_KEY_SPACE] && fireDelay > fireRate) {
-////    // Reset fire delay
-////    fireDelay = 0;
-////    // Invert file offset
-////    fireOffset = -fireOffset;
-////
-////    auto projectile = std::make_unique<Projectile>();
-////    projectile->position = position + glm::vec3(0.0f, 0.0f, 0.3f) + fireOffset;
-////    scene.objects.push_back(move(projectile));
-////  }
-//
-//  generateModelMatrix();
-//  return true;
-//}
-//
-//void Player::render(Scene &scene) {
-//  shader->use();
-//
-//  // Set up light
-//  shader->setUniform("LightDirection", scene.lightDirection);
-//  shader->setUniform("ViewPosition", scene.camera->position);
-//
-//  // use camera
-//  shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
-//  shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
-//
-//
-//  // render mesh
-//
-//  shader->setUniform("ModelMatrix", modelMatrix);
-//  shader->setUniform("Texture", *texture);
-//  mesh->render();
-//}
-//
-//void Player::onClick(Scene &scene) {
-//  std::cout << "Player has been clicked!" << std::endl;
-//}

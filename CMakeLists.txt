@@ -87,11 +87,46 @@ add_library(ppgso STATIC
         ppgso/util.cpp
         )
 
+
+
+#
+##include_directories(${MY_SOURCE_DIR}/src/BP/mocapHandFiles)
+##find_file(test mocapHandLib/SynLab.lib)
+#find_path(SynLab_LIB_DIR SynLab.lib C:\Users\PC\CLionProjects\ppgso\mocapHandLib)
+##find_library(SynLab mocapHandLib)
+##message(STATUS "path: ${SynLab}")
+#message(STATUS "path: ${SynLab_LIB_DIR}")
+##find_package (SynLab COMPONENTS REQUIRED SynLab_LIB_DIR)
+
+SET(A ${CMAKE_SOURCE_DIR}/mocapHandLib)
+
+find_library(SL SynLab.lib ${CMAKE_SOURCE_DIR}/mocapHandLib)
+
+
+message(STATUS "path: ${CMAKE_SOURCE_DIR}")
+#
+#find_path(SynLab_INCLUDE_DIR src/BP/mocapHandFiles/SynLab.h)
+#include_directories(SynLab_INCLUDE_DIR)
+#
+#
+#
+#
+#
+#link_directories(${PROJECT_SOURCE_DIR}/mocapHandLib)
+#find_library(SynLab_LIBRARY SynLab)
+#
+#
+#
+#set(YOUR_LIBRARIES ${SynLab_LIBRARY})
+
+
+
+
 # Make sure GLM uses radians and GLEW is a static library
 target_compile_definitions(ppgso PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC)
 
 # Link to GLFW, GLEW and OpenGL
-target_link_libraries(ppgso PUBLIC ${GLFW_LIBRARIES} GLEW::GLEW ${OPENGL_LIBRARIES})
+target_link_libraries(ppgso PUBLIC ${GLFW_LIBRARIES} GLEW::GLEW ${OPENGL_LIBRARIES} )
 # Pass on include directories
 target_include_directories(ppgso PUBLIC
         ppgso
@@ -165,17 +200,18 @@ install(TARGETS gl7_diffuse DESTINATION .)
 add_executable(gl8_framebuffer src/gl8_framebuffer/gl8_framebuffer.cpp)
 target_link_libraries(gl8_framebuffer ppgso shaders)
 install(TARGETS gl8_framebuffer DESTINATION .)
+#
+#FILE(GLOB SRCFILES src/projekt/*.cpp)
+## projekt
+#add_executable(projekt  ${SRCFILES} )
+#target_link_libraries(projekt ppgso shaders)
+#install(TARGETS projekt DESTINATION .)
 
-FILE(GLOB SRCFILES src/projekt/*.cpp)
-# projekt
-add_executable(projekt  ${SRCFILES} )
-target_link_libraries(projekt ppgso shaders)
-install(TARGETS projekt DESTINATION .)
-
-FILE(GLOB SRCFILES src/BP/*.cpp src/BP/skeleton/*.cpp src/BP/fileLoaders/*.cpp src/BP/models/*.cpp)
+FILE(GLOB SRCFILES src/BP/*.cpp src/BP/skeleton/*.cpp src/BP/fileLoaders/*.cpp src/BP/models/*.cpp src/BP/mocapHandFiles/*.cpp)
 # projekt
 add_executable(BP  ${SRCFILES} )
-target_link_libraries(BP ppgso shaders)
+#target_link_libraries(BP ppgso shaders)
+target_link_libraries(BP ppgso shaders ${SL})
 install(TARGETS BP DESTINATION .)
 
 ## gl9_scene

@@ -18,7 +18,12 @@ void Bonev2::addChild(Bonev2 *bone) {
 }
 
 void Bonev2::generateBoneMatrix(glm::mat4 parentMat, const std::map<int, glm::quat> &boneRotMat) {
-    glm::mat4 rotMat = glm::toMat4(boneRotMat.at(id));
+
+    glm::mat4 rotMat = glm::mat4{1};
+    try {
+        rotMat = glm::toMat4(boneRotMat.at(id));
+    } catch (...) {}
+
     this->vector =
             glm::translate(glm::mat4{1}, this->offset)
             * rotMat;

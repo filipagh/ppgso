@@ -17,7 +17,7 @@ void Skeletonv2::updateSkeleton(glm::mat4 modelBaseMat) {
             inverseBaseBoneMap[boneMap[i]->id] = glm::inverse(boneMap[i]->vector);
         }
     }
-    rootBone->updateBones(modelBaseMat, BoneMapper::getData(this->boneCount));
+    rootBone->updateBones(modelBaseMat, BoneMapper::getData(this->boneCount, this));
 }
 
 void Skeletonv2::addBone(Bonev2 *bone) {

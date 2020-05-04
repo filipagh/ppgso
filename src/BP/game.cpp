@@ -4,7 +4,7 @@
 #include "mainScene.h"
 #include "game.h"
 
-
+#include <src/BP/mocapHandFiles/SynLab.h>
 
 #include <iostream>
 #include <utility>
@@ -28,21 +28,58 @@ Scene* ParticleWindow::activScene = nullptr;
 Scene* ParticleWindow::rendersScene = nullptr;
 
 
+int main() {
+    // Create new window
+//
+//    auto a = SynGetVersion();
+//
+//    Skeleton s;
+//    SynReadSkeleton(&s,R"(C:\Users\PC\Desktop\Synertial_SDK_v3_0_Extended\RightGlove7Latest.sk)");
+//
+//    SynHubInfo info[4];
+//    uint32_t num = 4;
+//
+//
+//        SynInit();
+//        int code = SynEnumerate(info, &num,(uint32_t) 1000);
+//        SynHandle h;
+//        code = SynOpen(&h,&info[0].UID,NULL);
+//        SynFrame f;
+//
+//
+//            code = SynRead(h, &f);
+//            TransformedSensors p;
+//    code = SynApplyTransformation(&p,&f,-1);
+//    code = SynRead(h, &f);
+//    code = SynApplyTransformation(&p,&f,-2);
+//    code = SynRead(h, &f);
+//    code = SynApplyTransformation(&p,&f,0);
+//    code = SynApplyPose(&s,&p);
 
-//    std::map<int, int> keys;
-    // Store keyboard state
+
+    auto window = ParticleWindow{"BP", SIZE, SIZE};
+    MainScene sceneGarage = {};
+    ParticleWindow::changeScene(&sceneGarage, true);
+//    window.changeScene(&sceneGarage, true);
+
+
+    // Main execution loop
+    while (window.pollEvents()) {}
+    return EXIT_SUCCESS;
+}
+
+
+
 
 //public:
-
-
-    ParticleWindow::ParticleWindow(std::string title, int width, int height) : Window(std::move(title), width, height) {
+ParticleWindow::ParticleWindow(std::string title, int width, int height) : Window(std::move(title), width, height) {
         // Initialize OpenGL state
         // Enable Z-buffer
 //        glDisable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
     }
-    void ParticleWindow::onKey(int key, int scanCode, int action, int mods)  {
+void ParticleWindow::onKey(int key, int scanCode, int action, int mods)  {
         // Collect key state in a map
         ParticleWindow::rendersScene->keyEvent(key, scanCode, action, mods);
 
@@ -53,6 +90,7 @@ Scene* ParticleWindow::rendersScene = nullptr;
 ////            addParticle();
 //    }
     }
+
     void ParticleWindow::onIdle() {
         // Track time
         static auto time = (float) glfwGetTime();
@@ -75,20 +113,6 @@ Scene* ParticleWindow::rendersScene = nullptr;
         rendersScene->render();
 
     }
-
-int main() {
-    // Create new window
-
-    auto window = ParticleWindow{"BP", SIZE, SIZE};
-    MainScene sceneGarage = {};
-    ParticleWindow::changeScene(&sceneGarage, true);
-//    window.changeScene(&sceneGarage, true);
-
-
-    // Main execution loop
-    while (window.pollEvents()) {}
-    return EXIT_SUCCESS;
-}
 
 void ParticleWindow::changeScene(Scene *scene, bool init) {
         if (ParticleWindow::activScene != nullptr) {
