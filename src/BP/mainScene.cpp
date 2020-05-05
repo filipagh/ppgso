@@ -33,6 +33,7 @@ void MainScene::init() {
 
 
     BoneMapper::replayAnimator = new ReplayAnimator("C:\\Users\\PC\\Desktop\\fagh\\p8k.bvh", 0);
+    BoneMapper::loadMappingFile("postavicka.bm");
     std::unique_ptr<SkinSkeletonModel> obj;
     obj = std::make_unique<SkinSkeletonModel>("postavicka.obj", "postavicka.br", "postavicka.bmp", "postavicka.sk");
 //    obj = std::make_unique<SkinSkeletonModel>("test.obj", "test.br", "postavicka.bmp", "test.sk");

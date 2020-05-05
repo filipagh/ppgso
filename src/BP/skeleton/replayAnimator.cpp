@@ -4,16 +4,6 @@
 #include <sstream>
 #include "replayAnimator.h"
 
-std::map<int, glm::quat> ReplayAnimator::getKeyFrameData(float time) {
-
-    float deltaTime = fmodf(time,(this->timePerKeyFrame * (float)this->keyFrames.size()));
-    auto data = this->getKeyFrame(deltaTime);
-if (data.empty()) {
-    int a = 4;
-}
-    return data;
-}
-
 ReplayAnimator::ReplayAnimator(const std::string &bvh_file, float startTime) {
     this->startTime = startTime;
 
@@ -27,12 +17,7 @@ ReplayAnimator::ReplayAnimator(const std::string &bvh_file, float startTime) {
     std::string line;
     std::getline(head, line);  // end line
 
-    int c = 0;
     while (!head.eof()) {
-        if (c == 713) {
-            int cc = 4;
-        }
-        c++;
         std::getline(head, line);
         if (line == "") {
             break;
@@ -41,18 +26,25 @@ ReplayAnimator::ReplayAnimator(const std::string &bvh_file, float startTime) {
     }
 }
 
-std::map<int, glm::quat> ReplayAnimator::getKeyFrameFromLine(const std::string& string) {
+std::array<std::vector<glm::vec3>,2>  ReplayAnimator::getKeyFrameData(float time) {
+    std::array<std::vector<glm::vec3>,2> keyframes;
+    float deltaTime = fmodf(time,(this->timePerKeyFrame * (float)this->keyFrames.size()));
+    auto data = this->getKeyFrames(deltaTime);
+
+    return data;
+}
+
+std::vector<glm::vec3> ReplayAnimator::getKeyFrameFromLine(const std::string &string) {
     float x,y,z;
     std::stringstream head(string);
-//    head >> x >> y >> z; // ignor offset;
-    head >> y >> z >> x; // ignor offset;
+    head >> z >> x >> y; // ignor offset;
 
-    int counter = 1;
-    std::map<int, glm::quat> data;
+    std::vector<glm::vec3> data;
     while (!head.eof()) {
-        head >> z >> y >> x;
-        data[counter] = ReplayAnimator::getQuatFromEuler(x, y, z);
-        counter++;
+//        head >> z >> y >> x;
+//todo add axis recognison
+        head >> z >> x >> y;
+        data.emplace_back(x,y,z);
     }
     return data;
 }
@@ -61,16 +53,17 @@ glm::quat ReplayAnimator::getQuatFromEuler(float x, float y, float z) {
     return glm::quat(glm::vec3(glm::radians(x), glm::radians(y), glm::radians(z)));
 }
 
-std::map<int, glm::quat> ReplayAnimator::getKeyFrame(float d) {
+std::array<std::vector<glm::vec3>,2> ReplayAnimator::getKeyFrames(float d) {
+    std::array<std::vector<glm::vec3>,2> keyframes;
     float timeDivPerFrame = d / this->timePerKeyFrame;
     float timeModPerFrame = fmodf(d, this->timePerKeyFrame);
-    if (timeModPerFrame == 0) {
-        return this->keyFrames[(int)timeDivPerFrame];
-    }
-    auto lastFrame = this->keyFrames[(int)timeDivPerFrame];
-    auto nextFrame = this->keyFrames[(int)timeDivPerFrame + 1];
 
-    return this->interpolateKeyFrames(lastFrame,nextFrame,timeModPerFrame);
+    keyframes[0] = this->keyFrames[(int)timeDivPerFrame];
+    if (timeModPerFrame != 0) {
+        keyframes[1] = this->keyFrames[(int)timeDivPerFrame + 1];
+    }
+
+    return keyframes;
 }
 
 std::map<int, glm::quat>

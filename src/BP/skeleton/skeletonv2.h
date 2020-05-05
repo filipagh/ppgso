@@ -1,7 +1,6 @@
 #pragma once
 #include <ppgso/ppgso.h>
-
-#include "bonev2.h"
+#include <src/BP/skeleton/bonev2.h>
 
 
 /*!
