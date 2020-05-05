@@ -4,7 +4,7 @@
 #include "mainScene.h"
 #include "game.h"
 
-#include <src/BP/mocapHandFiles/SynLab.h>
+//#include <src/BP/mocapHandFiles/SynLab.h>
 
 #include <iostream>
 #include <utility>
