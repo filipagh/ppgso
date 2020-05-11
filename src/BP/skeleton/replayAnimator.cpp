@@ -3,16 +3,7 @@
 //#include <glm/ext/quaternion_float.hpp>
 #include <sstream>
 #include "replayAnimator.h"
-
-std::map<int, glm::quat> ReplayAnimator::getKeyFrameData(float time) {
-
-    float deltaTime = fmodf(time,(this->timePerKeyFrame * (float)this->keyFrames.size()));
-    auto data = this->getKeyFrame(deltaTime);
-if (data.empty()) {
-    int a = 4;
-}
-    return data;
-}
+#include "boneMapper.h"
 
 ReplayAnimator::ReplayAnimator(const std::string &bvh_file, float startTime) {
     this->startTime = startTime;
@@ -27,12 +18,7 @@ ReplayAnimator::ReplayAnimator(const std::string &bvh_file, float startTime) {
     std::string line;
     std::getline(head, line);  // end line
 
-    int c = 0;
     while (!head.eof()) {
-        if (c == 713) {
-            int cc = 4;
-        }
-        c++;
         std::getline(head, line);
         if (line == "") {
             break;
@@ -41,40 +27,50 @@ ReplayAnimator::ReplayAnimator(const std::string &bvh_file, float startTime) {
     }
 }
 
-std::map<int, glm::quat> ReplayAnimator::getKeyFrameFromLine(const std::string& string) {
+
+std::vector<glm::vec3> ReplayAnimator::getKeyFrameFromLine(const std::string &string) {
     float x,y,z;
     std::stringstream head(string);
-//    head >> x >> y >> z; // ignor offset;
-    head >> y >> z >> x; // ignor offset;
+    head >> z >> x >> y; // ignor offset;
 
-    int counter = 1;
-    std::map<int, glm::quat> data;
+    std::vector<glm::vec3> data;
     while (!head.eof()) {
-        head >> z >> y >> x;
-        data[counter] = ReplayAnimator::getQuatFromEuler(x, y, z);
-        counter++;
+//        head >> z >> y >> x;
+//todo add axis recognison
+        head >> z >> x >> y;
+        data.emplace_back(x,y,z);
     }
     return data;
 }
 
-glm::quat ReplayAnimator::getQuatFromEuler(float x, float y, float z) {
-    return glm::quat(glm::vec3(glm::radians(x), glm::radians(y), glm::radians(z)));
+std::map<int, glm::quat> ReplayAnimator::getKeyFrameData(float time) {
+    float deltaTime = fmodf(time,(this->timePerKeyFrame * ((float)this->keyFrames.size() - 1)));
+    auto data = this->getKeyFrame(deltaTime);
+
+    return data;
 }
 
 std::map<int, glm::quat> ReplayAnimator::getKeyFrame(float d) {
     float timeDivPerFrame = d / this->timePerKeyFrame;
     float timeModPerFrame = fmodf(d, this->timePerKeyFrame);
-    if (timeModPerFrame == 0) {
-        return this->keyFrames[(int)timeDivPerFrame];
+
+    auto modelKeyFrame = BoneMapper::applyMapping(this->keyFrames[(int)timeDivPerFrame]);
+    if (timeModPerFrame != 0) {
+        modelKeyFrame = interpolateKeyFrames(modelKeyFrame,
+                                             BoneMapper::applyMapping(this->keyFrames[(int) timeDivPerFrame + 1]),
+                                             timeModPerFrame);
     }
-    auto lastFrame = this->keyFrames[(int)timeDivPerFrame];
-    auto nextFrame = this->keyFrames[(int)timeDivPerFrame + 1];
 
-    return this->interpolateKeyFrames(lastFrame,nextFrame,timeModPerFrame);
+
+    return modelKeyFrame;
 }
+//
+//glm::quat ReplayAnimator::getQuatFromEuler(float x, float y, float z) {
+//    return glm::quat(glm::vec3(glm::radians(x), glm::radians(y), glm::radians(z)));
+//}
 
-std::map<int, glm::quat>
-ReplayAnimator::interpolateKeyFrames(std::map<int, glm::quat> map, std::map<int, glm::quat> map1, float d) {
+//
+std::map<int, glm::quat> ReplayAnimator::interpolateKeyFrames(std::map<int, glm::quat> map, std::map<int, glm::quat> map1, float d) {
     std::map<int, glm::quat> data;
     for (auto &boneRot : map) {
         int index = boneRot.first;

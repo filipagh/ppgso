@@ -186,7 +186,7 @@ install(TARGETS gl8_framebuffer DESTINATION .)
 #install(TARGETS projekt DESTINATION .)
 
 #FILE(GLOB SRCFILES src/BP/*.cpp src/BP/skeleton/*.cpp src/BP/fileLoaders/*.cpp src/BP/models/*.cpp src/BP/mocapHandFiles/*.cpp)
-FILE(GLOB SRCFILES src/BP/*.cpp src/BP/skeleton/*.cpp src/BP/fileLoaders/*.cpp src/BP/models/*.cpp)
+FILE(GLOB SRCFILES src/BP/*.cpp src/BP/skeleton/*.cpp src/BP/fileLoaders/*.cpp src/BP/models/*.cpp src/BP/mapper/*.cpp)
 # projekt
 add_executable(BP  ${SRCFILES} )
 target_link_libraries(BP ppgso shaders)
