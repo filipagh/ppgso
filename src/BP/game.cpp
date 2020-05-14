@@ -74,10 +74,11 @@ int main() {
 //public:
 ParticleWindow::ParticleWindow(std::string title, int width, int height) : Window(std::move(title), width, height) {
         // Initialize OpenGL state
-        // Enable Z-buffer
+
+    // Enable Z-buffer
 //        glDisable(GL_CULL_FACE);
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LEQUAL);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
     }
 void ParticleWindow::onKey(int key, int scanCode, int action, int mods)  {
         // Collect key state in a map
@@ -98,7 +99,8 @@ void ParticleWindow::onKey(int key, int scanCode, int action, int mods)  {
         float dTime = (float)glfwGetTime() - time;
         time = (float) glfwGetTime();
         // Set gray background
-        glClearColor(.1f,.1f,.1f,1.0f);
+        glClearColor(1, 1, 1, 0);
+//        glClearColor(.1f,.1f,.1f,1.0f);
         // Clear depth and color buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // Update all objects in scene

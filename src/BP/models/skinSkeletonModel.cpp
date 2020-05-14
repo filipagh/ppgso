@@ -11,8 +11,8 @@
 
 
 
-#include <cmake-build-debug/shaders/skeleton_texture_frag_glsl.h>
-#include <cmake-build-debug/shaders/skeleton_texture_vert_glsl.h>
+#include <cmake-build-debug-mingw/shaders/skeleton_texture_frag_glsl.h>
+#include <cmake-build-debug-mingw/shaders/skeleton_texture_vert_glsl.h>
 #include <util.h>
 #include <glm/gtx/string_cast.hpp>
 #include <src/BP/fileLoaders/fileLoader.h>

@@ -26,13 +26,13 @@ void MainScene::init() {
     camera->back = camera->position;
     camera->up = glm::vec3{0.0f, 1.0f, 0.0f};
     camera = move(camera);
-
+//
 //    std::unique_ptr<SkeletonModelv2> objj;
 //    objj = std::make_unique<SkeletonModelv2>(FileLoader::loadSkeletonFromFile("postavicka.sk"));
 //    objects.push_back(move(objj));
 
 
-    BoneMapper::replayAnimator = new ReplayAnimator("/home/filipagh/Desktop/fagh/p12.bvh", 0);
+    BoneMapper::replayAnimator = new ReplayAnimator("C:\\Users\\PC\\Desktop\\fagh\\p12.bvh", 0);
     BoneMapper::loadMappingFile("postavicka.bm");
     std::unique_ptr<SkinSkeletonModel> obj;
     obj = std::make_unique<SkinSkeletonModel>("postavicka.obj", "postavicka.br", "postavicka.bmp", "postavicka.sk");

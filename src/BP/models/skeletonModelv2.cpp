@@ -32,7 +32,7 @@ void SkeletonModelv2::onClick(Scene &scene) {}
 SkeletonModelv2::SkeletonModelv2(Skeletonv2 *skeleton) {
     this->skeleton = skeleton;
 //    this->skeleton->updateSkeleton(NULL);
-//    this->renderSkeleton();
+    this->renderSkeleton();
 }
 
 void SkeletonModelv2::renderSkeleton() {

@@ -33,8 +33,8 @@ void main() {
         }
         boneI = BoneIds[counter];
     }
-    gl_Position = ProjectionMatrix * ViewMatrix *totalPos*  vec4(Position.xyz, 1);
-//    gl_Position = ProjectionMatrix * ViewMatrix *totalPos*  vec4(Position, 1.0);
+//    gl_Position = ProjectionMatrix * ViewMatrix *totalPos*  vec4(Position.xyz, 1);
+    gl_Position = ProjectionMatrix * ViewMatrix *totalPos*  vec4(Position, 1.0);
 
 
 
